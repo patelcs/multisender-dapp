@@ -1,54 +1,289 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import {
   Wallet,
-  ListPlus,
-  CheckCircle,
   Send,
+  Plus,
+  BookUser,
+  ShieldCheck,
+  Settings,
+  Database,
   ArrowRight,
   HelpCircle,
   Coins,
   Layers,
+  ChevronRight,
+  Zap,
+  Star,
+  Globe,
+  Download,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Guide",
-  description:
-    "Step-by-step guide on how to use MultiSender to send tokens to multiple addresses in one transaction.",
-};
-
-const STEPS = [
-  {
-    icon: Wallet,
-    title: "1. Connect Your Wallet",
-    desc: 'Click the "Connect Wallet" button in the top-right corner. Select your preferred wallet (MetaMask, Coinbase, WalletConnect, etc.). Make sure you\'re on the correct network (Ethereum Mainnet or Sepolia).',
-  },
-  {
-    icon: Coins,
-    title: "2. Select Token Type",
-    desc: 'On the Send page, click "Add Token" to create a new token group. Choose "Native (ETH)" for sending ETH, or paste an ERC20 token contract address to send that token.',
-  },
-  {
-    icon: ListPlus,
-    title: "3. Add Recipients",
-    desc: "Add recipient addresses one by one with the amount each should receive. Use the Amount Tools to quickly fill amounts: Same (identical amount for all), Increment (increasing amounts), Formula (custom pattern), or Percentage (proportional split).",
-  },
-  {
-    icon: Layers,
-    title: "4. Add More Tokens (Optional)",
-    desc: 'To send multiple tokens in one transaction, click "Add Token" again. You can import the same recipient list from a previous token group, with or without amounts.',
-  },
-  {
-    icon: CheckCircle,
-    title: "5. Approve Tokens",
-    desc: 'Click "Review & Send" to open the stepper. For each ERC20 token, you\'ll be prompted to approve the MultiSender contract for the exact amount needed — only if current allowance is insufficient. Already-approved tokens are automatically marked as done.',
-  },
-  {
-    icon: Send,
-    title: "6. Confirm & Send",
-    desc: "After all approvals are in place, confirm the final transaction. All tokens will be distributed to all recipients in a single transaction. You'll receive a transaction hash and a link to the block explorer.",
-  },
+const SECTIONS = [
+  { id: "send", label: "Sending Assets", icon: Send },
+  { id: "management", label: "Tokens & Contacts", icon: BookUser },
+  { id: "advanced", label: "Advanced Features", icon: Settings },
 ];
+
+export default function GuidePage() {
+  const [activeTab, setActiveTab] = useState("send");
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      {/* Header */}
+      <div className="mb-12 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+          <span className="gradient-text">Usage</span> Guide
+        </h1>
+        <p className="mt-4 text-lg text-[var(--muted)] max-w-2xl mx-auto">
+          Learn how to master SandWitch and streamline your multi-chain workflows.
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="mb-10 flex flex-wrap justify-center gap-2">
+        {SECTIONS.map((s) => (
+          <button
+            key={s.id}
+            onClick={() => setActiveTab(s.id)}
+            className={`flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
+              activeTab === s.id
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
+                : "bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:text-[var(--foreground)] hover:border-blue-500/30"
+            }`}
+          >
+            <s.icon size={18} />
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Content Area */}
+      <div className="min-h-[400px]">
+        {activeTab === "send" && <SendSection />}
+        {activeTab === "management" && <ManagementSection />}
+        {activeTab === "advanced" && <AdvancedSection />}
+      </div>
+
+      {/* FAQ */}
+      <section className="mt-20">
+        <div className="mb-8 border-b border-[var(--border)] pb-4">
+          <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {FAQ.map((item) => (
+            <div
+              key={item.q}
+              className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 transition-all hover:border-blue-500/20"
+            >
+              <h3 className="flex items-center gap-2 font-bold text-blue-500">
+                <HelpCircle size={16} />
+                {item.q}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+                {item.a}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer Links */}
+      <section className="mt-16 flex flex-wrap justify-center gap-4">
+        <Link
+          href="/multisend"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-blue-500/40 hover:scale-[1.02]"
+        >
+          Start Multi Sending <ArrowRight size={18} />
+        </Link>
+        <Link
+          href="/approvals"
+          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-8 py-3.5 text-sm font-bold text-[var(--foreground)] transition-all hover:bg-[var(--accent)] hover:scale-[1.02]"
+        >
+          Manage Approvals <ShieldCheck size={18} />
+        </Link>
+      </section>
+    </div>
+  );
+}
+
+function SendSection() {
+  return (
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* Multi Send */}
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+        <div>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-500">
+            <Layers size={14} /> Recommended
+          </div>
+          <h2 className="text-3xl font-bold">Multi Send</h2>
+          <p className="mt-4 text-[var(--muted)] leading-relaxed">
+            The flagship feature of SandWitch. Batch hundreds of recipients and multiple tokens 
+            into a single transaction to save up to 80% on gas fees.
+          </p>
+          <ul className="mt-6 space-y-4">
+            <li className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-blue-500/20 p-1 text-blue-500"><ChevronRight size={12} /></div>
+              <span className="text-sm"><strong>Add Tokens:</strong> Click "Add Another Token" to create groups for ETH or any ERC20.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-blue-500/20 p-1 text-blue-500"><ChevronRight size={12} /></div>
+              <span className="text-sm"><strong>Recipient Lists:</strong> Paste addresses or select from your address book.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-blue-500/20 p-1 text-blue-500"><ChevronRight size={12} /></div>
+              <span className="text-sm"><strong>Amount Tools:</strong> Use bulk tools to set identical amounts, increments, or percentages.</span>
+            </li>
+          </ul>
+        </div>
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 shadow-xl">
+          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-[var(--muted)]">Workflow</h3>
+          <div className="space-y-6">
+            {[
+              "Connect Wallet & Select Network",
+              "Add Token Groups & Recipients",
+              "Review & Approve ERC20 Permissions",
+              "Execute Atomic Multi-Send Transaction"
+            ].map((step, i) => (
+              <div key={i} className="flex gap-4">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-sm font-black text-white">{i + 1}</div>
+                <p className="text-sm font-medium self-center">{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Single Send */}
+      <div className="rounded-3xl border border-[var(--border)] bg-[var(--accent)] p-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+          <div className="flex-1">
+            <h3 className="text-2xl font-bold flex items-center gap-3">
+              <Zap className="text-amber-500" /> Single Send
+            </h3>
+            <p className="mt-3 text-sm text-[var(--muted)]">
+              Perfect for standard one-to-one transfers. It uses the direct <code>transfer()</code> function 
+              instead of the Multi-Send contract for maximum simplicity and zero overhead.
+            </p>
+          </div>
+          <Link 
+            href="/send"
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white hover:bg-blue-700"
+          >
+            Try Single Send <ArrowRight size={16} />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ManagementSection() {
+  return (
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Token List */}
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8">
+          <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-500">
+            <Star size={28} />
+          </div>
+          <h3 className="text-2xl font-bold">Token List</h3>
+          <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">
+            Stop searching for contract addresses. Save your favorite ERC20 tokens locally 
+            to pick them instantly during any send operation.
+          </p>
+          <div className="mt-6 space-y-3">
+            <div className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-medium">
+              <Globe size={14} className="text-blue-500" /> Global: Available across all wallets
+            </div>
+            <div className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-medium">
+              <Wallet size={14} className="text-purple-500" /> Personal: Private to your connected wallet
+            </div>
+          </div>
+          <Link href="/settings/tokens" className="mt-6 inline-block text-sm font-bold text-blue-500 hover:underline">
+            Manage your tokens →
+          </Link>
+        </div>
+
+        {/* Contact List */}
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8">
+          <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-500/10 text-green-500">
+            <BookUser size={28} />
+          </div>
+          <h3 className="text-2xl font-bold">Address Book</h3>
+          <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">
+            Manage your frequent recipients. Save addresses with custom labels to enable 
+            instant auto-suggest in all address inputs.
+          </p>
+          <div className="mt-6 flex flex-col gap-2">
+            <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-widest">Key Benefits</span>
+            <ul className="grid gap-2 grid-cols-2">
+              <li className="text-xs text-[var(--muted)] flex gap-2"><Plus size={10} className="text-green-500" /> No re-typing</li>
+              <li className="text-xs text-[var(--muted)] flex gap-2"><Plus size={10} className="text-green-500" /> Error prevention</li>
+              <li className="text-xs text-[var(--muted)] flex gap-2"><Plus size={10} className="text-green-500" /> Label tagging</li>
+              <li className="text-xs text-[var(--muted)] flex gap-2"><Plus size={10} className="text-green-500" /> Local storage</li>
+            </ul>
+          </div>
+          <Link href="/settings/address-book" className="mt-6 inline-block text-sm font-bold text-blue-500 hover:underline">
+            Open Address Book →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdvancedSection() {
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Approvals */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <ShieldCheck className="mb-4 text-blue-500" size={24} />
+          <h4 className="font-bold">Approval Manager</h4>
+          <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+            Review and modify spending permissions for any ERC20 token. Set specific 
+            allowances or revoke access completely for maximum security.
+          </p>
+        </div>
+
+        {/* RPC Override */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <Globe className="mb-4 text-purple-500" size={24} />
+          <h4 className="font-bold">RPC Overrides</h4>
+          <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+            Connect directly to your private nodes or preferred RPC providers (Alchemy, 
+            Infura, QuickNode) to bypass rate limits and improve reliability.
+          </p>
+        </div>
+
+        {/* Import/Export */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <Database className="mb-4 text-green-500" size={24} />
+          <h4 className="font-bold">Data Control</h4>
+          <p className="mt-2 text-xs text-[var(--muted)] leading-relaxed">
+            Your data is yours. Export your tokens, contacts, and settings as a JSON file 
+            and import them into any other browser or device.
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-8">
+        <h3 className="text-xl font-bold flex items-center gap-2 text-amber-500">
+          <HelpCircle size={20} /> Pro Tip: Exact Approvals
+        </h3>
+        <p className="mt-4 text-sm leading-relaxed text-[var(--muted)]">
+          By default, SandWitch calculates the <strong>exact total</strong> needed for your 
+          Multi-Send batch and requests approval for that amount only. Unlike other apps 
+          that ask for "Infinite" approvals, we ensure your remaining allowance returns to zero 
+          after the send, minimizing your security risk.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 const FAQ = [
   {
@@ -64,93 +299,15 @@ const FAQ = [
     a: "No. The stepper checks your current allowance. If you've already approved enough, that step is automatically skipped.",
   },
   {
-    q: "Can I use this on testnets?",
-    a: "Yes! The app supports Ethereum Sepolia for testing. Switch your network in the chain selector.",
+    q: "Are my contacts and tokens shared?",
+    a: "No. All data is stored locally in your browser's IndexedDB. We have no servers and never see your data.",
   },
   {
-    q: "What wallets are supported?",
-    a: "MetaMask, Coinbase Wallet, WalletConnect (which supports Trust Wallet, Rainbow, and many more), and any browser extension wallet that injects a standard provider.",
+    q: "Can I use custom RPCs for all chains?",
+    a: "Yes. You can override the default public RPC for any supported network in Settings > Networks.",
+  },
+  {
+    q: "What is the benefit of Global vs User scope?",
+    a: "Global tokens/contacts appear no matter which wallet you connect. User scope items only show up when that specific wallet address is active.",
   },
 ];
-
-export default function GuidePage() {
-  return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-        <span className="gradient-text">Usage</span> Guide
-      </h1>
-      <p className="mt-4 text-lg text-[var(--muted)]">
-        Follow these steps to send tokens to multiple addresses in one
-        transaction.
-      </p>
-
-      {/* Steps */}
-      <div className="mt-12 space-y-8">
-        {STEPS.map((step) => (
-          <div
-            key={step.title}
-            className="flex gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 transition-all hover:border-blue-500/20"
-          >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
-              <step.icon size={24} />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
-                {step.desc}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* FAQ */}
-      <section className="mt-16">
-        <h2 className="text-2xl font-bold">
-          Frequently Asked Questions
-        </h2>
-        <div className="mt-6 space-y-4">
-          {FAQ.map((item) => (
-            <details
-              key={item.q}
-              className="group rounded-xl border border-[var(--border)] bg-[var(--card)]"
-            >
-              <summary className="flex cursor-pointer items-center gap-3 px-5 py-4 text-sm font-medium">
-                <HelpCircle
-                  size={16}
-                  className="shrink-0 text-blue-500 transition-transform group-open:rotate-90"
-                />
-                {item.q}
-              </summary>
-              <div className="border-t border-[var(--border)] px-5 py-4 text-sm leading-relaxed text-[var(--muted)]">
-                {item.a}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* Links */}
-      <section className="mt-16 flex flex-col gap-4 sm:flex-row">
-        <Link
-          href="/send"
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-blue-500/40"
-        >
-          Start Sending <ArrowRight size={14} />
-        </Link>
-        <Link
-          href="/docs"
-          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-medium transition-all hover:border-blue-500/50 hover:bg-[var(--accent)]"
-        >
-          Read Docs <ArrowRight size={14} />
-        </Link>
-        <Link
-          href="/security"
-          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-medium transition-all hover:border-blue-500/50 hover:bg-[var(--accent)]"
-        >
-          Security Info <ArrowRight size={14} />
-        </Link>
-      </section>
-    </div>
-  );
-}

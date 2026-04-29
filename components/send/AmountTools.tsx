@@ -6,12 +6,13 @@ import { type RecipientRow } from "./RecipientList";
 
 interface AmountToolsProps {
   recipients: RecipientRow[];
+  decimals: number;
   onChange: (recipients: RecipientRow[]) => void;
 }
 
 type ToolMode = "same" | "increment" | "formula" | "percentage" | null;
 
-export default function AmountTools({ recipients, onChange }: AmountToolsProps) {
+export default function AmountTools({ recipients, decimals, onChange }: AmountToolsProps) {
   const [mode, setMode] = useState<ToolMode>(null);
   const [sameValue, setSameValue] = useState("");
   const [startValue, setStartValue] = useState("");
@@ -58,7 +59,7 @@ export default function AmountTools({ recipients, onChange }: AmountToolsProps) 
         const each = total / recipients.length;
         updated = recipients.map((r) => ({
           ...r,
-          amount: String(parseFloat(each.toFixed(18))),
+          amount: String(parseFloat(each.toFixed(decimals))),
         }));
         break;
       }

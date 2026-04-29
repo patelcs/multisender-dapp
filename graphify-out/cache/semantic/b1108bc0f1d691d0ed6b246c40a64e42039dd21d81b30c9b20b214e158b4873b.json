@@ -1,0 +1,1 @@
+{"nodes": [{"id": "web3provider_web3provider", "label": "Web3 Provider", "file_type": "code", "source_file": "providers/Web3Provider.tsx"}], "edges": [{"source": "web3provider_web3provider", "target": "wagmi_wagmiconfig", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "providers/Web3Provider.tsx"}], "hyperedges": []}

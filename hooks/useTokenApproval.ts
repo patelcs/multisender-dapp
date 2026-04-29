@@ -4,10 +4,9 @@ import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 
 import { ERC20_ABI } from "@/config/abi";
 import { MULTISENDER_ADDRESSES } from "@/config/chains";
 import { useChainId, useAccount } from "wagmi";
-import { parseUnits } from "viem";
 
 /**
- * Hook to check and request ERC20 approval for the MultiSender contract.
+ * Hook to check and request ERC20 approval for the SandWitch contract.
  */
 export function useTokenApproval(
   tokenAddress: `0x${string}` | undefined,
@@ -52,13 +51,13 @@ export function useTokenApproval(
   const allowance = (currentAllowance as bigint) ?? 0n;
   const needsApproval = enabled && allowance < requiredAmount;
 
-  const requestApproval = () => {
+  const requestApproval = (amount?: bigint) => {
     if (!tokenAddress || !spender) return;
     approve({
       address: tokenAddress,
       abi: ERC20_ABI,
       functionName: "approve",
-      args: [spender, requiredAmount],
+      args: [spender, amount ?? requiredAmount],
     });
   };
 

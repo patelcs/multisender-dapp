@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Trash2, ChevronDown, ChevronUp, Copy } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Trash2, ChevronDown, ChevronUp, Copy, Wallet } from "lucide-react";
 import TokenSelector from "./TokenSelector";
 import RecipientList, { type RecipientRow } from "./RecipientList";
 import AmountTools from "./AmountTools";
+import { formatUnits } from "viem";
 
 export interface TokenGroupData {
   id: string;
   isNative: boolean;
   tokenAddress: string;
+  tokenSymbol?: string;
+  decimals?: number;
+  balance?: bigint;
   recipients: RecipientRow[];
 }
 
@@ -18,7 +22,7 @@ interface TokenGroupProps {
   index: number;
   totalGroups: number;
   otherGroups: TokenGroupData[];
-  onChange: (updated: TokenGroupData) => void;
+  onChange: (updated: Partial<TokenGroupData>) => void;
   onRemove: () => void;
 }
 
@@ -33,14 +37,22 @@ export default function TokenGroup({
   const [collapsed, setCollapsed] = useState(false);
   const [showImport, setShowImport] = useState(false);
 
-  const tokenSymbol = group.isNative ? "ETH" : "Token";
+  const tokenSymbol = group.tokenSymbol || (group.isNative ? "ETH" : "Token");
 
   const updateField = <K extends keyof TokenGroupData>(
     field: K,
     value: TokenGroupData[K]
   ) => {
-    onChange({ ...group, [field]: value });
+    onChange({ [field]: value });
   };
+
+  const updateTokenInfo = useCallback((info: { name: string; symbol: string; decimals: number; balance?: bigint }) => {
+    onChange({
+      tokenSymbol: info.symbol,
+      decimals: info.decimals,
+      balance: info.balance,
+    });
+  }, [onChange]);
 
   const importFromGroup = (sourceGroup: TokenGroupData, includeAmounts: boolean) => {
     const imported: RecipientRow[] = sourceGroup.recipients.map((r) => ({
@@ -64,16 +76,22 @@ export default function TokenGroup({
           Token Group #{index + 1}
           {group.isNative ? (
             <span className="rounded-md bg-blue-500/10 px-2 py-0.5 text-xs text-blue-500">
-              ETH
+              {group.tokenSymbol || "ETH"}
             </span>
           ) : group.tokenAddress ? (
             <span className="rounded-md bg-purple-500/10 px-2 py-0.5 text-xs text-purple-500">
-              ERC20
+              {group.tokenSymbol || "ERC20"}
             </span>
           ) : null}
           <span className="text-xs font-normal text-[var(--muted)]">
             ({group.recipients.length} recipients)
           </span>
+          {group.balance !== undefined && (
+            <span className="flex items-center gap-1 text-[10px] font-medium text-blue-500/80 bg-blue-500/5 px-2 py-0.5 rounded-md">
+              <Wallet size={10} />
+              {Number(formatUnits(group.balance, group.isNative ? 18 : (group.decimals ?? 18))).toLocaleString(undefined, { maximumFractionDigits: 4 })}
+            </span>
+          )}
         </button>
         <div className="flex items-center gap-2">
           {totalGroups > 1 && (
@@ -95,8 +113,19 @@ export default function TokenGroup({
           <TokenSelector
             isNative={group.isNative}
             tokenAddress={group.tokenAddress}
+            tokenSymbol={group.tokenSymbol}
+            decimals={group.decimals}
+            balance={group.balance}
             onToggleNative={(isNative) => updateField("isNative", isNative)}
             onAddressChange={(addr) => updateField("tokenAddress", addr)}
+            onInfoChange={updateTokenInfo}
+            onPickToken={(token) => {
+              onChange({
+                tokenAddress: token.address,
+                tokenSymbol: token.symbol,
+                decimals: token.decimals,
+              });
+            }}
           />
 
           {/* Import from other group */}
@@ -148,6 +177,7 @@ export default function TokenGroup({
           {/* Amount tools */}
           <AmountTools
             recipients={group.recipients}
+            decimals={group.decimals ?? (group.isNative ? 18 : 18)}
             onChange={(r) => updateField("recipients", r)}
           />
         </div>

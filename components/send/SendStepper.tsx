@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   CheckCircle,
   Circle,
   Loader2,
   X,
-  Shield,
   ExternalLink,
   AlertCircle,
 } from "lucide-react";
@@ -29,6 +28,8 @@ interface SendStepperProps {
   onSuccess: () => void;
 }
 
+const MAX_UINT256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
 /** Individual approval step component */
 function ApprovalStepCard({
   step,
@@ -39,6 +40,9 @@ function ApprovalStepCard({
   isActive: boolean;
   onComplete: () => void;
 }) {
+  const [approvalType, setApprovalType] = useState<"exact" | "max">("exact");
+  const hasCompleted = useRef(false);
+
   const {
     needsApproval,
     requestApproval,
@@ -48,20 +52,29 @@ function ApprovalStepCard({
     approveError,
   } = useTokenApproval(step.tokenAddress, step.requiredAmount);
 
+  // Handle successful approval
   useEffect(() => {
-    if (approvalConfirmed) {
+    if (approvalConfirmed && !hasCompleted.current) {
+      hasCompleted.current = true;
       refetchAllowance();
       onComplete();
     }
   }, [approvalConfirmed, onComplete, refetchAllowance]);
 
-  // Already approved
-  if (!needsApproval && isActive) {
-    // Auto-complete if already approved
-    setTimeout(onComplete, 500);
-  }
+  // Handle auto-complete if already approved
+  useEffect(() => {
+    if (!needsApproval && isActive && !hasCompleted.current) {
+      hasCompleted.current = true;
+      const timeout = setTimeout(onComplete, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [needsApproval, isActive, onComplete]);
 
   const isDone = !needsApproval || approvalConfirmed;
+
+  const handleApprove = () => {
+    requestApproval(approvalType === "max" ? MAX_UINT256 : step.requiredAmount);
+  };
 
   return (
     <div
@@ -90,29 +103,69 @@ function ApprovalStepCard({
               ? "Approval confirmed ✓"
               : isApproving
               ? "Waiting for approval confirmation..."
-              : "Approval required for the exact send amount"}
+              : "Choose approval amount and confirm"}
           </p>
         </div>
         {isActive && !isDone && !isApproving && (
           <button
-            onClick={requestApproval}
+            onClick={handleApprove}
             className="shrink-0 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-blue-700 active:scale-[0.98]"
           >
             Approve
           </button>
         )}
       </div>
+
+      {isActive && !isDone && !isApproving && (
+        <div className="mt-4 flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-[var(--muted)]">Approval Type:</span>
+            <div className="flex gap-1 rounded-lg bg-[var(--accent)] p-1">
+              <button
+                onClick={() => setApprovalType("exact")}
+                className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                  approvalType === "exact"
+                    ? "bg-blue-500 text-white shadow-sm"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                Exact Amount
+              </button>
+              <button
+                onClick={() => setApprovalType("max")}
+                className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                  approvalType === "max"
+                    ? "bg-purple-600 text-white shadow-sm"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                Infinite (Max)
+              </button>
+            </div>
+          </div>
+          
+          <p className="text-[10px] leading-relaxed text-[var(--muted)]">
+            {approvalType === "exact" 
+              ? "Approves only the amount required for this transaction. More secure but requires a new approval next time."
+              : "Approves a very large amount. You won't have to approve this token again for future transactions, saving gas and time."}
+          </p>
+        </div>
+      )}
+
       {approveError && (
         <p className="mt-2 flex items-center gap-1 text-xs text-red-500">
           <AlertCircle size={12} />
           {(approveError as Error).message?.slice(0, 100) ?? "Approval failed"}
         </p>
       )}
+      
       {isActive && !isDone && (
         <div className="mt-3">
           <InfoBanner variant="security">
-            You are approving the MultiSender contract to transfer <strong>only the exact amount</strong> needed
-            for this send. The contract is non-custodial and cannot access any other tokens or amounts.
+            The SandWitch contract is <strong>non-custodial</strong>. 
+            {approvalType === "exact" 
+              ? " You are approving only the minimum required amount." 
+              : " Approving 'Max' is safe as the contract can only transfer tokens when you explicitly call the send function."}
           </InfoBanner>
         </div>
       )}
@@ -127,7 +180,6 @@ export default function SendStepper({
   onSuccess,
 }: SendStepperProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [approvalsComplete, setApprovalsComplete] = useState(false);
   const chainId = useChainId();
   const explorer = EXPLORER_URLS[chainId];
 
@@ -135,22 +187,11 @@ export default function SendStepper({
     useMultiSend();
 
   const totalSteps = approvalSteps.length + 1; // approvals + final send
+  const approvalsComplete = approvalSteps.length === 0 || currentStep >= approvalSteps.length;
 
   const handleApprovalComplete = useCallback(() => {
-    if (currentStep < approvalSteps.length - 1) {
-      setCurrentStep((s) => s + 1);
-    } else {
-      setApprovalsComplete(true);
-      setCurrentStep(approvalSteps.length);
-    }
-  }, [currentStep, approvalSteps.length]);
-
-  useEffect(() => {
-    if (approvalSteps.length === 0) {
-      setApprovalsComplete(true);
-      setCurrentStep(0);
-    }
-  }, [approvalSteps.length]);
+    setCurrentStep((s) => s + 1);
+  }, []);
 
   useEffect(() => {
     if (isConfirmed) {
@@ -188,7 +229,7 @@ export default function SendStepper({
           {/* Approval steps */}
           {approvalSteps.map((step, i) => (
             <ApprovalStepCard
-              key={step.tokenAddress}
+              key={`${step.tokenAddress}-${i}`}
               step={step}
               isActive={currentStep === i}
               onComplete={handleApprovalComplete}
@@ -259,7 +300,7 @@ export default function SendStepper({
             {(approvalsComplete || approvalSteps.length === 0) && !isConfirmed && (
               <div className="mt-3">
                 <InfoBanner variant="info">
-                  The MultiSender contract is <strong>non-custodial</strong> — it forwards tokens
+                  The SandWitch contract is <strong>non-custodial</strong> — it forwards tokens
                   directly to recipients and cannot store your funds. Any excess ETH is automatically refunded.
                 </InfoBanner>
               </div>

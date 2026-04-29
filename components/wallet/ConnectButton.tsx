@@ -2,6 +2,7 @@
 
 import { useConnect, useDisconnect, useAccount, useChainId, useSwitchChain } from "wagmi";
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, Wallet, LogOut, Copy, Check, ExternalLink } from "lucide-react";
 import { SUPPORTED_CHAINS, EXPLORER_URLS } from "@/config/chains";
 
@@ -16,12 +17,14 @@ export default function ConnectButton() {
   const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [showChainMenu, setShowChainMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const accountRef = useRef<HTMLDivElement>(null);
   const chainRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click
   useEffect(() => {
+    setMounted(true);
     function handleClick(e: MouseEvent) {
       if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
         setShowAccountMenu(false);
@@ -59,10 +62,10 @@ export default function ConnectButton() {
           Connect Wallet
         </button>
 
-        {/* Wallet selection modal */}
-        {showWalletModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-2xl">
+        {/* Wallet selection modal via Portal to escape Navbar's backdrop-filter containing block */}
+        {mounted && showWalletModal && createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-[var(--foreground)]">Connect Wallet</h3>
                 <button
@@ -91,7 +94,8 @@ export default function ConnectButton() {
                 By connecting, you agree to the terms of service.
               </p>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </>
     );

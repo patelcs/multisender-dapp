@@ -1,5 +1,5 @@
 /**
- * MultiSender contract ABI — derived from the Solidity IMultiSender interface.
+ * SandWitch contract ABI — derived from the Solidity ISandWitch interface.
  */
 export const MULTISENDER_ABI = [
   {
@@ -65,6 +65,16 @@ export const MULTISENDER_ABI = [
  * Minimal ERC20 ABI — only the functions we need for approval & info.
  */
 export const ERC20_ABI = [
+  {
+    name: "transfer",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
   {
     name: "approve",
     type: "function",

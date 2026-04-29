@@ -1,0 +1,2560 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "multi_send_workflow",
+        "label": "Multi-Send Transaction Workflow",
+        "nodes": [
+          "usemultisend_usemultisend",
+          "sendstepper_sendstepper",
+          "abi_multisender_abi",
+          "chains_multisender_addresses"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "hooks/useMultiSend.ts"
+      },
+      {
+        "id": "app_entry_context",
+        "label": "Application Context Wrappers",
+        "nodes": [
+          "themeprovider_themeprovider",
+          "web3provider_web3provider",
+          "layout_rootlayout"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 0.95,
+        "source_file": "app/layout.tsx"
+      },
+      {
+        "id": "app_navigation_structure",
+        "label": "App Navigation Structure",
+        "nodes": [
+          "page_homepage",
+          "page_guidepage",
+          "page_donatepage",
+          "page_docspage",
+          "page_securitypage",
+          "page_sendpage"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "app/layout.tsx"
+      },
+      {
+        "id": "agents_graphify_workflow",
+        "label": "Graphify Workflow",
+        "nodes": [
+          "agents_graphify",
+          "agents_graphify_query",
+          "agents_graphify_path",
+          "agents_graphify_explain",
+          "agents_graphify_update"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.9,
+        "source_file": "AGENTS.md"
+      },
+      {
+        "id": "nextjs_app_routing",
+        "label": "Next.js App Routing Structure",
+        "nodes": [
+          "layout_donatelayout",
+          "layout_sendlayout",
+          "next_env_nextjs_types"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "app/"
+      },
+      {
+        "id": "project_documentation",
+        "label": "Project Documentation and Agent Guidelines",
+        "nodes": [
+          "readme_multisender_dapp",
+          "gemini_graphify_knowledge_graph",
+          "claude_agent_guidelines"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.8,
+        "source_file": "README.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "next.config.ts",
+      "file_type": "code",
+      "source_file": "next.config.ts",
+      "source_location": "L1",
+      "id": "next_config_ts",
+      "community": 30,
+      "norm_label": "next.config.ts"
+    },
+    {
+      "label": "next-env.d.ts",
+      "file_type": "code",
+      "source_file": "next-env.d.ts",
+      "source_location": "L1",
+      "id": "next_env_d_ts",
+      "community": 31,
+      "norm_label": "next-env.d.ts"
+    },
+    {
+      "label": "eslint.config.mjs",
+      "file_type": "code",
+      "source_file": "eslint.config.mjs",
+      "source_location": "L1",
+      "id": "eslint_config_mjs",
+      "community": 32,
+      "norm_label": "eslint.config.mjs"
+    },
+    {
+      "label": "postcss.config.mjs",
+      "file_type": "code",
+      "source_file": "postcss.config.mjs",
+      "source_location": "L1",
+      "id": "postcss_config_mjs",
+      "community": 33,
+      "norm_label": "postcss.config.mjs"
+    },
+    {
+      "label": "useAddressBook.ts",
+      "file_type": "code",
+      "source_file": "hooks/useAddressBook.ts",
+      "source_location": "L1",
+      "id": "hooks_useaddressbook_ts",
+      "community": 11,
+      "norm_label": "useaddressbook.ts"
+    },
+    {
+      "label": "useAddressBook()",
+      "file_type": "code",
+      "source_file": "hooks/useAddressBook.ts",
+      "source_location": "L17",
+      "id": "hooks_useaddressbook_useaddressbook",
+      "community": 11,
+      "norm_label": "useaddressbook()"
+    },
+    {
+      "label": "useMultiSend.ts",
+      "file_type": "code",
+      "source_file": "hooks/useMultiSend.ts",
+      "source_location": "L1",
+      "id": "hooks_usemultisend_ts",
+      "community": 12,
+      "norm_label": "usemultisend.ts"
+    },
+    {
+      "label": "useMultiSend()",
+      "file_type": "code",
+      "source_file": "hooks/useMultiSend.ts",
+      "source_location": "L25",
+      "id": "hooks_usemultisend_usemultisend",
+      "community": 12,
+      "norm_label": "usemultisend()"
+    },
+    {
+      "label": "useRPCConfig.ts",
+      "file_type": "code",
+      "source_file": "hooks/useRPCConfig.ts",
+      "source_location": "L1",
+      "id": "hooks_userpcconfig_ts",
+      "community": 13,
+      "norm_label": "userpcconfig.ts"
+    },
+    {
+      "label": "useRPCConfig()",
+      "file_type": "code",
+      "source_file": "hooks/useRPCConfig.ts",
+      "source_location": "L6",
+      "id": "hooks_userpcconfig_userpcconfig",
+      "community": 13,
+      "norm_label": "userpcconfig()"
+    },
+    {
+      "label": "Web3Provider.tsx",
+      "file_type": "code",
+      "source_file": "providers/Web3Provider.tsx",
+      "source_location": "L1",
+      "id": "providers_web3provider_tsx",
+      "community": 14,
+      "norm_label": "web3provider.tsx"
+    },
+    {
+      "label": "Web3Provider()",
+      "file_type": "code",
+      "source_file": "providers/Web3Provider.tsx",
+      "source_location": "L9",
+      "id": "providers_web3provider_web3provider",
+      "community": 14,
+      "norm_label": "web3provider()"
+    },
+    {
+      "label": "ThemeProvider.tsx",
+      "file_type": "code",
+      "source_file": "providers/ThemeProvider.tsx",
+      "source_location": "L1",
+      "id": "providers_themeprovider_tsx",
+      "community": 6,
+      "norm_label": "themeprovider.tsx"
+    },
+    {
+      "label": "useTheme()",
+      "file_type": "code",
+      "source_file": "providers/ThemeProvider.tsx",
+      "source_location": "L12",
+      "id": "providers_themeprovider_usetheme",
+      "community": 6,
+      "norm_label": "usetheme()"
+    },
+    {
+      "label": "toggle()",
+      "file_type": "code",
+      "source_file": "providers/ThemeProvider.tsx",
+      "source_location": "L34",
+      "id": "providers_themeprovider_toggle",
+      "community": 6,
+      "norm_label": "toggle()"
+    },
+    {
+      "label": "abi.ts",
+      "file_type": "code",
+      "source_file": "config/abi.ts",
+      "source_location": "L1",
+      "id": "config_abi_ts",
+      "community": 34,
+      "norm_label": "abi.ts"
+    },
+    {
+      "label": "chains.ts",
+      "file_type": "code",
+      "source_file": "config/chains.ts",
+      "source_location": "L1",
+      "id": "config_chains_ts",
+      "community": 35,
+      "norm_label": "chains.ts"
+    },
+    {
+      "label": "wagmi.ts",
+      "file_type": "code",
+      "source_file": "config/wagmi.ts",
+      "source_location": "L1",
+      "id": "config_wagmi_ts",
+      "community": 15,
+      "norm_label": "wagmi.ts"
+    },
+    {
+      "label": "createWagmiConfig()",
+      "file_type": "code",
+      "source_file": "config/wagmi.ts",
+      "source_location": "L26",
+      "id": "config_wagmi_createwagmiconfig",
+      "community": 15,
+      "norm_label": "createwagmiconfig()"
+    },
+    {
+      "label": "AddressInput.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/AddressInput.tsx",
+      "source_location": "L1",
+      "id": "components_ui_addressinput_tsx",
+      "community": 7,
+      "norm_label": "addressinput.tsx"
+    },
+    {
+      "label": "handleClick()",
+      "file_type": "code",
+      "source_file": "components/ui/AddressInput.tsx",
+      "source_location": "L37",
+      "id": "ui_addressinput_handleclick",
+      "community": 7,
+      "norm_label": "handleclick()"
+    },
+    {
+      "label": "handleSave()",
+      "file_type": "code",
+      "source_file": "components/ui/AddressInput.tsx",
+      "source_location": "L47",
+      "id": "ui_addressinput_handlesave",
+      "community": 7,
+      "norm_label": "handlesave()"
+    },
+    {
+      "label": "InfoBanner.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/InfoBanner.tsx",
+      "source_location": "L1",
+      "id": "components_ui_infobanner_tsx",
+      "community": 36,
+      "norm_label": "infobanner.tsx"
+    },
+    {
+      "label": "Navbar.tsx",
+      "file_type": "code",
+      "source_file": "components/layout/Navbar.tsx",
+      "source_location": "L1",
+      "id": "components_layout_navbar_tsx",
+      "community": 37,
+      "norm_label": "navbar.tsx"
+    },
+    {
+      "label": "Footer.tsx",
+      "file_type": "code",
+      "source_file": "components/layout/Footer.tsx",
+      "source_location": "L1",
+      "id": "components_layout_footer_tsx",
+      "community": 16,
+      "norm_label": "footer.tsx"
+    },
+    {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "components/layout/Footer.tsx",
+      "source_location": "L15",
+      "id": "layout_footer_footer",
+      "community": 16,
+      "norm_label": "footer()"
+    },
+    {
+      "label": "ConnectButton.tsx",
+      "file_type": "code",
+      "source_file": "components/wallet/ConnectButton.tsx",
+      "source_location": "L1",
+      "id": "components_wallet_connectbutton_tsx",
+      "community": 17,
+      "norm_label": "connectbutton.tsx"
+    },
+    {
+      "label": "ConnectButton()",
+      "file_type": "code",
+      "source_file": "components/wallet/ConnectButton.tsx",
+      "source_location": "L9",
+      "id": "wallet_connectbutton_connectbutton",
+      "community": 17,
+      "norm_label": "connectbutton()"
+    },
+    {
+      "label": "SendStepper.tsx",
+      "file_type": "code",
+      "source_file": "components/send/SendStepper.tsx",
+      "source_location": "L1",
+      "id": "components_send_sendstepper_tsx",
+      "community": 8,
+      "norm_label": "sendstepper.tsx"
+    },
+    {
+      "label": "handleApprove()",
+      "file_type": "code",
+      "source_file": "components/send/SendStepper.tsx",
+      "source_location": "L75",
+      "id": "send_sendstepper_handleapprove",
+      "community": 8,
+      "norm_label": "handleapprove()"
+    },
+    {
+      "label": "handleSend()",
+      "file_type": "code",
+      "source_file": "components/send/SendStepper.tsx",
+      "source_location": "L202",
+      "id": "send_sendstepper_handlesend",
+      "community": 8,
+      "norm_label": "handlesend()"
+    },
+    {
+      "label": "AmountTools.tsx",
+      "file_type": "code",
+      "source_file": "components/send/AmountTools.tsx",
+      "source_location": "L1",
+      "id": "components_send_amounttools_tsx",
+      "community": 18,
+      "norm_label": "amounttools.tsx"
+    },
+    {
+      "label": "applyTool()",
+      "file_type": "code",
+      "source_file": "components/send/AmountTools.tsx",
+      "source_location": "L23",
+      "id": "send_amounttools_applytool",
+      "community": 18,
+      "norm_label": "applytool()"
+    },
+    {
+      "label": "RecipientList.tsx",
+      "file_type": "code",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L1",
+      "id": "components_send_recipientlist_tsx",
+      "community": 3,
+      "norm_label": "recipientlist.tsx"
+    },
+    {
+      "label": "addRow()",
+      "file_type": "code",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L23",
+      "id": "send_recipientlist_addrow",
+      "community": 3,
+      "norm_label": "addrow()"
+    },
+    {
+      "label": "removeRow()",
+      "file_type": "code",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L30",
+      "id": "send_recipientlist_removerow",
+      "community": 3,
+      "norm_label": "removerow()"
+    },
+    {
+      "label": "updateRow()",
+      "file_type": "code",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L35",
+      "id": "send_recipientlist_updaterow",
+      "community": 3,
+      "norm_label": "updaterow()"
+    },
+    {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L1",
+      "id": "app_layout_tsx",
+      "community": 19,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "RootLayout()",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L43",
+      "id": "app_layout_rootlayout",
+      "community": 19,
+      "norm_label": "rootlayout()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L1",
+      "id": "app_page_tsx",
+      "community": 20,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleRefresh()",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L123",
+      "id": "app_page_handlerefresh",
+      "community": 20,
+      "norm_label": "handlerefresh()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/guide/page.tsx",
+      "source_location": "L1",
+      "id": "app_guide_page_tsx",
+      "community": 21,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "GuidePage()",
+      "file_type": "code",
+      "source_file": "app/guide/page.tsx",
+      "source_location": "L30",
+      "id": "guide_page_guidepage",
+      "community": 21,
+      "norm_label": "guidepage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/approvals/page.tsx",
+      "source_location": "L1",
+      "id": "app_approvals_page_tsx",
+      "community": 22,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleUpdateAllowance()",
+      "file_type": "code",
+      "source_file": "app/approvals/page.tsx",
+      "source_location": "L58",
+      "id": "approvals_page_handleupdateallowance",
+      "community": 22,
+      "norm_label": "handleupdateallowance()"
+    },
+    {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/layout.tsx",
+      "source_location": "L1",
+      "id": "app_settings_layout_tsx",
+      "community": 38,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/page.tsx",
+      "source_location": "L1",
+      "id": "app_settings_page_tsx",
+      "community": 23,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "SettingsPage()",
+      "file_type": "code",
+      "source_file": "app/settings/page.tsx",
+      "source_location": "L3",
+      "id": "settings_page_settingspage",
+      "community": 23,
+      "norm_label": "settingspage()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/tokens/page.tsx",
+      "source_location": "L1",
+      "id": "app_settings_tokens_page_tsx",
+      "community": 9,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleClickOutside()",
+      "file_type": "code",
+      "source_file": "app/settings/tokens/page.tsx",
+      "source_location": "L123",
+      "id": "tokens_page_handleclickoutside",
+      "community": 9,
+      "norm_label": "handleclickoutside()"
+    },
+    {
+      "label": "handleAdd()",
+      "file_type": "code",
+      "source_file": "app/settings/tokens/page.tsx",
+      "source_location": "L144",
+      "id": "tokens_page_handleadd",
+      "community": 9,
+      "norm_label": "handleadd()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L1",
+      "id": "app_settings_data_page_tsx",
+      "community": 1,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleExport()",
+      "file_type": "code",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L31",
+      "id": "data_page_handleexport",
+      "community": 1,
+      "norm_label": "handleexport()"
+    },
+    {
+      "label": "handleFileSelect()",
+      "file_type": "code",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L43",
+      "id": "data_page_handlefileselect",
+      "community": 1,
+      "norm_label": "handlefileselect()"
+    },
+    {
+      "label": "confirmImport()",
+      "file_type": "code",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L64",
+      "id": "data_page_confirmimport",
+      "community": 1,
+      "norm_label": "confirmimport()"
+    },
+    {
+      "label": "handleClear()",
+      "file_type": "code",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L153",
+      "id": "data_page_handleclear",
+      "community": 1,
+      "norm_label": "handleclear()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/networks/page.tsx",
+      "source_location": "L1",
+      "id": "app_settings_networks_page_tsx",
+      "community": 10,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleSave()",
+      "file_type": "code",
+      "source_file": "app/settings/networks/page.tsx",
+      "source_location": "L22",
+      "id": "networks_page_handlesave",
+      "community": 10,
+      "norm_label": "handlesave()"
+    },
+    {
+      "label": "handleReset()",
+      "file_type": "code",
+      "source_file": "app/settings/networks/page.tsx",
+      "source_location": "L37",
+      "id": "networks_page_handlereset",
+      "community": 10,
+      "norm_label": "handlereset()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L1",
+      "id": "app_settings_address_book_page_tsx",
+      "community": 4,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleAdd()",
+      "file_type": "code",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L65",
+      "id": "address_book_page_handleadd",
+      "community": 4,
+      "norm_label": "handleadd()"
+    },
+    {
+      "label": "startEdit()",
+      "file_type": "code",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L90",
+      "id": "address_book_page_startedit",
+      "community": 4,
+      "norm_label": "startedit()"
+    },
+    {
+      "label": "handleUpdate()",
+      "file_type": "code",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L96",
+      "id": "address_book_page_handleupdate",
+      "community": 4,
+      "norm_label": "handleupdate()"
+    },
+    {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "app/donate/layout.tsx",
+      "source_location": "L1",
+      "id": "app_donate_layout_tsx",
+      "community": 24,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "DonateLayout()",
+      "file_type": "code",
+      "source_file": "app/donate/layout.tsx",
+      "source_location": "L9",
+      "id": "donate_layout_donatelayout",
+      "community": 24,
+      "norm_label": "donatelayout()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/donate/page.tsx",
+      "source_location": "L1",
+      "id": "app_donate_page_tsx",
+      "community": 25,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "copyAddress()",
+      "file_type": "code",
+      "source_file": "app/donate/page.tsx",
+      "source_location": "L11",
+      "id": "donate_page_copyaddress",
+      "community": 25,
+      "norm_label": "copyaddress()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/docs/page.tsx",
+      "source_location": "L1",
+      "id": "app_docs_page_tsx",
+      "community": 39,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/security/page.tsx",
+      "source_location": "L1",
+      "id": "app_security_page_tsx",
+      "community": 40,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L1",
+      "id": "app_multisend_page_tsx",
+      "community": 2,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "createEmptyGroup()",
+      "file_type": "code",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L15",
+      "id": "multisend_page_createemptygroup",
+      "community": 2,
+      "norm_label": "createemptygroup()"
+    },
+    {
+      "label": "validate()",
+      "file_type": "code",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L52",
+      "id": "multisend_page_validate",
+      "community": 2,
+      "norm_label": "validate()"
+    },
+    {
+      "label": "buildSendData()",
+      "file_type": "code",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L90",
+      "id": "multisend_page_buildsenddata",
+      "community": 2,
+      "norm_label": "buildsenddata()"
+    },
+    {
+      "label": "handleReviewAndSend()",
+      "file_type": "code",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L136",
+      "id": "multisend_page_handlereviewandsend",
+      "community": 2,
+      "norm_label": "handlereviewandsend()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/send/page.tsx",
+      "source_location": "L1",
+      "id": "app_send_page_tsx",
+      "community": 26,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "handleSend()",
+      "file_type": "code",
+      "source_file": "app/send/page.tsx",
+      "source_location": "L40",
+      "id": "send_page_handlesend",
+      "community": 26,
+      "norm_label": "handlesend()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/getting-started/page.tsx",
+      "source_location": "L1",
+      "id": "app_getting_started_page_tsx",
+      "community": 41,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "constants.ts",
+      "file_type": "code",
+      "source_file": "lib/constants.ts",
+      "source_location": "L1",
+      "id": "lib_constants_ts",
+      "community": 42,
+      "norm_label": "constants.ts"
+    },
+    {
+      "label": "storage.ts",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L1",
+      "id": "lib_storage_ts",
+      "community": 0,
+      "norm_label": "storage.ts"
+    },
+    {
+      "label": "getDB()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L59",
+      "id": "lib_storage_getdb",
+      "community": 0,
+      "norm_label": "getdb()"
+    },
+    {
+      "label": "readAll()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L88",
+      "id": "lib_storage_readall",
+      "community": 0,
+      "norm_label": "readall()"
+    },
+    {
+      "label": "writeItem()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L104",
+      "id": "lib_storage_writeitem",
+      "community": 0,
+      "norm_label": "writeitem()"
+    },
+    {
+      "label": "deleteItem()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L116",
+      "id": "lib_storage_deleteitem",
+      "community": 0,
+      "norm_label": "deleteitem()"
+    },
+    {
+      "label": "clearStore()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L128",
+      "id": "lib_storage_clearstore",
+      "community": 0,
+      "norm_label": "clearstore()"
+    },
+    {
+      "label": "filterByScope()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L141",
+      "id": "lib_storage_filterbyscope",
+      "community": 0,
+      "norm_label": "filterbyscope()"
+    },
+    {
+      "label": "getAllAddressBook()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L154",
+      "id": "lib_storage_getalladdressbook",
+      "community": 0,
+      "norm_label": "getalladdressbook()"
+    },
+    {
+      "label": "getAddressBook()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L158",
+      "id": "lib_storage_getaddressbook",
+      "community": 0,
+      "norm_label": "getaddressbook()"
+    },
+    {
+      "label": "addAddressBookEntry()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L163",
+      "id": "lib_storage_addaddressbookentry",
+      "community": 0,
+      "norm_label": "addaddressbookentry()"
+    },
+    {
+      "label": "updateAddressBookEntry()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L175",
+      "id": "lib_storage_updateaddressbookentry",
+      "community": 0,
+      "norm_label": "updateaddressbookentry()"
+    },
+    {
+      "label": "removeAddressBookEntry()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L185",
+      "id": "lib_storage_removeaddressbookentry",
+      "community": 0,
+      "norm_label": "removeaddressbookentry()"
+    },
+    {
+      "label": "getAllTokenList()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L191",
+      "id": "lib_storage_getalltokenlist",
+      "community": 0,
+      "norm_label": "getalltokenlist()"
+    },
+    {
+      "label": "getTokenList()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L195",
+      "id": "lib_storage_gettokenlist",
+      "community": 0,
+      "norm_label": "gettokenlist()"
+    },
+    {
+      "label": "addSavedToken()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L200",
+      "id": "lib_storage_addsavedtoken",
+      "community": 0,
+      "norm_label": "addsavedtoken()"
+    },
+    {
+      "label": "updateSavedToken()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L210",
+      "id": "lib_storage_updatesavedtoken",
+      "community": 0,
+      "norm_label": "updatesavedtoken()"
+    },
+    {
+      "label": "removeSavedToken()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L220",
+      "id": "lib_storage_removesavedtoken",
+      "community": 0,
+      "norm_label": "removesavedtoken()"
+    },
+    {
+      "label": "getCustomRPCs()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L226",
+      "id": "lib_storage_getcustomrpcs",
+      "community": 0,
+      "norm_label": "getcustomrpcs()"
+    },
+    {
+      "label": "setCustomRPC()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L230",
+      "id": "lib_storage_setcustomrpc",
+      "community": 0,
+      "norm_label": "setcustomrpc()"
+    },
+    {
+      "label": "removeCustomRPC()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L238",
+      "id": "lib_storage_removecustomrpc",
+      "community": 0,
+      "norm_label": "removecustomrpc()"
+    },
+    {
+      "label": "exportUserData()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L248",
+      "id": "lib_storage_exportuserdata",
+      "community": 0,
+      "norm_label": "exportuserdata()"
+    },
+    {
+      "label": "importUserData()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L263",
+      "id": "lib_storage_importuserdata",
+      "community": 0,
+      "norm_label": "importuserdata()"
+    },
+    {
+      "label": "validateImportData()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L309",
+      "id": "lib_storage_validateimportdata",
+      "community": 0,
+      "norm_label": "validateimportdata()"
+    },
+    {
+      "label": "clearAllData()",
+      "file_type": "code",
+      "source_file": "lib/storage.ts",
+      "source_location": "L318",
+      "id": "lib_storage_clearalldata",
+      "community": 1,
+      "norm_label": "clearalldata()"
+    },
+    {
+      "label": "Gas Efficiency",
+      "file_type": "document",
+      "source_file": "app/page.tsx",
+      "source_location": {
+        "line": 34,
+        "column": 11
+      },
+      "rationale": "Pay gas once instead of N times by batching multiple transfers into a single transaction.",
+      "community": 43,
+      "norm_label": "gas efficiency",
+      "id": "multisender_gasefficient"
+    },
+    {
+      "label": "Non-Custodial Design",
+      "file_type": "document",
+      "source_file": "app/security/page.tsx",
+      "source_location": {
+        "line": 23,
+        "column": 11
+      },
+      "rationale": "Tokens are forwarded directly from user wallet to recipients; contract never holds or controls assets.",
+      "community": 44,
+      "norm_label": "non-custodial design",
+      "id": "multisender_noncustodial"
+    },
+    {
+      "label": "Atomic Execution",
+      "file_type": "document",
+      "source_file": "app/security/page.tsx",
+      "source_location": {
+        "line": 61,
+        "column": 11
+      },
+      "rationale": "Every send is atomic \u2014 either all transfers succeed, or the entire transaction reverts.",
+      "community": 45,
+      "norm_label": "atomic execution",
+      "id": "multisender_atomic"
+    },
+    {
+      "label": "Automatic ETH Refund",
+      "file_type": "document",
+      "source_file": "app/security/page.tsx",
+      "source_location": {
+        "line": 33,
+        "column": 11
+      },
+      "rationale": "Contract automatically refunds excess ETH back to sender after distribution.",
+      "community": 46,
+      "norm_label": "automatic eth refund",
+      "id": "multisender_refund"
+    },
+    {
+      "label": "Exact Approval Strategy",
+      "file_type": "document",
+      "source_file": "app/security/page.tsx",
+      "source_location": {
+        "line": 28,
+        "column": 11
+      },
+      "rationale": "Requested approval for ERC20 tokens is limited to the exact amount needed for the specific batch, minimizing risk.",
+      "community": 47,
+      "norm_label": "exact approval strategy",
+      "id": "multisender_approval"
+    },
+    {
+      "label": "Next.js Agent Rules",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Version has breaking changes \u2014 APIs, conventions, and file structure may all differ from training data.",
+      "community": 27,
+      "norm_label": "next.js agent rules",
+      "id": "agents_nextjs_agent_rules"
+    },
+    {
+      "label": "Graphify Project Rules",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Prefer graphify tools for cross-module questions as they traverse extracted and inferred edges; use report for architecture overview and wiki for navigation.",
+      "community": 27,
+      "norm_label": "graphify project rules",
+      "id": "agents_graphify"
+    },
+    {
+      "label": "Globe Icon",
+      "file_type": "image",
+      "source_file": "public/globe.svg",
+      "community": 48,
+      "norm_label": "globe icon",
+      "id": "globe_svg"
+    },
+    {
+      "label": "Next.js Logo",
+      "file_type": "image",
+      "source_file": "public/next.svg",
+      "community": 49,
+      "norm_label": "next.js logo",
+      "id": "next_svg"
+    },
+    {
+      "label": "Vercel Logo",
+      "file_type": "image",
+      "source_file": "public/vercel.svg",
+      "community": 50,
+      "norm_label": "vercel logo",
+      "id": "vercel_svg"
+    },
+    {
+      "label": "MultiSender DApp",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Entry-point documentation describing the Next.js project setup, development workflow, and deployment on Vercel",
+      "community": 5,
+      "norm_label": "multisender dapp",
+      "id": "readme_multisender_dapp"
+    },
+    {
+      "label": "Next.js Framework",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 5,
+      "norm_label": "next.js framework",
+      "id": "readme_nextjs_framework"
+    },
+    {
+      "label": "Vercel Deployment",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 5,
+      "norm_label": "vercel deployment",
+      "id": "readme_vercel_deployment"
+    },
+    {
+      "label": "Geist Font",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 5,
+      "norm_label": "geist font",
+      "id": "readme_geist_font"
+    },
+    {
+      "label": "Graphify Knowledge Graph",
+      "file_type": "document",
+      "source_file": "GEMINI.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Instructs AI agents to use graphify for codebase navigation and to keep the graph updated after code changes",
+      "community": 28,
+      "norm_label": "graphify knowledge graph",
+      "id": "gemini_graphify_knowledge_graph"
+    },
+    {
+      "label": "Agent Guidelines",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Provides consistent instructions for different AI agents including graphify usage and graph-first navigation",
+      "community": 28,
+      "norm_label": "agent guidelines",
+      "id": "claude_agent_guidelines"
+    },
+    {
+      "label": "Browser Window Icon",
+      "file_type": "image",
+      "source_file": "public/window.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 29,
+      "norm_label": "browser window icon",
+      "id": "window_browser_window_icon"
+    },
+    {
+      "label": "File Document Icon",
+      "file_type": "image",
+      "source_file": "public/file.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 29,
+      "norm_label": "file document icon",
+      "id": "file_document_icon"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "hooks/useAddressBook.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "hooks_useaddressbook_ts",
+      "_tgt": "hooks_useaddressbook_useaddressbook",
+      "source": "hooks_useaddressbook_ts",
+      "target": "hooks_useaddressbook_useaddressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "hooks/useMultiSend.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_src": "hooks_usemultisend_ts",
+      "_tgt": "hooks_usemultisend_usemultisend",
+      "source": "hooks_usemultisend_ts",
+      "target": "hooks_usemultisend_usemultisend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "hooks/useRPCConfig.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "hooks_userpcconfig_ts",
+      "_tgt": "hooks_userpcconfig_userpcconfig",
+      "source": "hooks_userpcconfig_ts",
+      "target": "hooks_userpcconfig_userpcconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "providers/Web3Provider.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "providers_web3provider_tsx",
+      "_tgt": "providers_web3provider_web3provider",
+      "source": "providers_web3provider_tsx",
+      "target": "providers_web3provider_web3provider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "providers/ThemeProvider.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "providers_themeprovider_tsx",
+      "_tgt": "providers_themeprovider_usetheme",
+      "source": "providers_themeprovider_tsx",
+      "target": "providers_themeprovider_usetheme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "providers/ThemeProvider.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "providers_themeprovider_tsx",
+      "_tgt": "providers_themeprovider_toggle",
+      "source": "providers_themeprovider_tsx",
+      "target": "providers_themeprovider_toggle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config/wagmi.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_src": "config_wagmi_ts",
+      "_tgt": "config_wagmi_createwagmiconfig",
+      "source": "config_wagmi_ts",
+      "target": "config_wagmi_createwagmiconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "config/wagmi.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_src": "config_wagmi_createwagmiconfig",
+      "_tgt": "lib_storage_getcustomrpcs",
+      "source": "config_wagmi_createwagmiconfig",
+      "target": "lib_storage_getcustomrpcs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/AddressInput.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "components_ui_addressinput_tsx",
+      "_tgt": "ui_addressinput_handleclick",
+      "source": "components_ui_addressinput_tsx",
+      "target": "ui_addressinput_handleclick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/AddressInput.tsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_src": "components_ui_addressinput_tsx",
+      "_tgt": "ui_addressinput_handlesave",
+      "source": "components_ui_addressinput_tsx",
+      "target": "ui_addressinput_handlesave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/layout/Footer.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "components_layout_footer_tsx",
+      "_tgt": "layout_footer_footer",
+      "source": "components_layout_footer_tsx",
+      "target": "layout_footer_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/wallet/ConnectButton.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "components_wallet_connectbutton_tsx",
+      "_tgt": "wallet_connectbutton_connectbutton",
+      "source": "components_wallet_connectbutton_tsx",
+      "target": "wallet_connectbutton_connectbutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/SendStepper.tsx",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_src": "components_send_sendstepper_tsx",
+      "_tgt": "send_sendstepper_handleapprove",
+      "source": "components_send_sendstepper_tsx",
+      "target": "send_sendstepper_handleapprove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/SendStepper.tsx",
+      "source_location": "L202",
+      "weight": 1.0,
+      "_src": "components_send_sendstepper_tsx",
+      "_tgt": "send_sendstepper_handlesend",
+      "source": "components_send_sendstepper_tsx",
+      "target": "send_sendstepper_handlesend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/AmountTools.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "components_send_amounttools_tsx",
+      "_tgt": "send_amounttools_applytool",
+      "source": "components_send_amounttools_tsx",
+      "target": "send_amounttools_applytool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "components_send_recipientlist_tsx",
+      "_tgt": "send_recipientlist_addrow",
+      "source": "components_send_recipientlist_tsx",
+      "target": "send_recipientlist_addrow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "components_send_recipientlist_tsx",
+      "_tgt": "send_recipientlist_removerow",
+      "source": "components_send_recipientlist_tsx",
+      "target": "send_recipientlist_removerow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/send/RecipientList.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_src": "components_send_recipientlist_tsx",
+      "_tgt": "send_recipientlist_updaterow",
+      "source": "components_send_recipientlist_tsx",
+      "target": "send_recipientlist_updaterow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/layout.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "app_layout_tsx",
+      "_tgt": "app_layout_rootlayout",
+      "source": "app_layout_tsx",
+      "target": "app_layout_rootlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_src": "app_page_tsx",
+      "_tgt": "app_page_handlerefresh",
+      "source": "app_page_tsx",
+      "target": "app_page_handlerefresh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/guide/page.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "app_guide_page_tsx",
+      "_tgt": "guide_page_guidepage",
+      "source": "app_guide_page_tsx",
+      "target": "guide_page_guidepage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/approvals/page.tsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_src": "app_approvals_page_tsx",
+      "_tgt": "approvals_page_handleupdateallowance",
+      "source": "app_approvals_page_tsx",
+      "target": "approvals_page_handleupdateallowance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "app_settings_page_tsx",
+      "_tgt": "settings_page_settingspage",
+      "source": "app_settings_page_tsx",
+      "target": "settings_page_settingspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/tokens/page.tsx",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_src": "app_settings_tokens_page_tsx",
+      "_tgt": "tokens_page_handleclickoutside",
+      "source": "app_settings_tokens_page_tsx",
+      "target": "tokens_page_handleclickoutside",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/tokens/page.tsx",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_src": "app_settings_tokens_page_tsx",
+      "_tgt": "tokens_page_handleadd",
+      "source": "app_settings_tokens_page_tsx",
+      "target": "tokens_page_handleadd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "app_settings_data_page_tsx",
+      "_tgt": "data_page_handleexport",
+      "source": "app_settings_data_page_tsx",
+      "target": "data_page_handleexport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "app_settings_data_page_tsx",
+      "_tgt": "data_page_handlefileselect",
+      "source": "app_settings_data_page_tsx",
+      "target": "data_page_handlefileselect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_src": "app_settings_data_page_tsx",
+      "_tgt": "data_page_confirmimport",
+      "source": "app_settings_data_page_tsx",
+      "target": "data_page_confirmimport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_src": "app_settings_data_page_tsx",
+      "_tgt": "data_page_handleclear",
+      "source": "app_settings_data_page_tsx",
+      "target": "data_page_handleclear",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "data_page_handleexport",
+      "_tgt": "lib_storage_exportuserdata",
+      "source": "data_page_handleexport",
+      "target": "lib_storage_exportuserdata"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_src": "data_page_confirmimport",
+      "_tgt": "lib_storage_importuserdata",
+      "source": "data_page_confirmimport",
+      "target": "lib_storage_importuserdata"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/settings/data/page.tsx",
+      "source_location": "L154",
+      "weight": 1.0,
+      "_src": "data_page_handleclear",
+      "_tgt": "lib_storage_clearalldata",
+      "source": "data_page_handleclear",
+      "target": "lib_storage_clearalldata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/networks/page.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "app_settings_networks_page_tsx",
+      "_tgt": "networks_page_handlesave",
+      "source": "app_settings_networks_page_tsx",
+      "target": "networks_page_handlesave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/networks/page.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "app_settings_networks_page_tsx",
+      "_tgt": "networks_page_handlereset",
+      "source": "app_settings_networks_page_tsx",
+      "target": "networks_page_handlereset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_src": "app_settings_address_book_page_tsx",
+      "_tgt": "address_book_page_handleadd",
+      "source": "app_settings_address_book_page_tsx",
+      "target": "address_book_page_handleadd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_src": "app_settings_address_book_page_tsx",
+      "_tgt": "address_book_page_startedit",
+      "source": "app_settings_address_book_page_tsx",
+      "target": "address_book_page_startedit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/settings/address-book/page.tsx",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_src": "app_settings_address_book_page_tsx",
+      "_tgt": "address_book_page_handleupdate",
+      "source": "app_settings_address_book_page_tsx",
+      "target": "address_book_page_handleupdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/donate/layout.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "app_donate_layout_tsx",
+      "_tgt": "donate_layout_donatelayout",
+      "source": "app_donate_layout_tsx",
+      "target": "donate_layout_donatelayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/donate/page.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "app_donate_page_tsx",
+      "_tgt": "donate_page_copyaddress",
+      "source": "app_donate_page_tsx",
+      "target": "donate_page_copyaddress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "app_multisend_page_tsx",
+      "_tgt": "multisend_page_createemptygroup",
+      "source": "app_multisend_page_tsx",
+      "target": "multisend_page_createemptygroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_src": "app_multisend_page_tsx",
+      "_tgt": "multisend_page_validate",
+      "source": "app_multisend_page_tsx",
+      "target": "multisend_page_validate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_src": "app_multisend_page_tsx",
+      "_tgt": "multisend_page_buildsenddata",
+      "source": "app_multisend_page_tsx",
+      "target": "multisend_page_buildsenddata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_src": "app_multisend_page_tsx",
+      "_tgt": "multisend_page_handlereviewandsend",
+      "source": "app_multisend_page_tsx",
+      "target": "multisend_page_handlereviewandsend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "app/multisend/page.tsx",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_src": "multisend_page_handlereviewandsend",
+      "_tgt": "multisend_page_validate",
+      "source": "multisend_page_validate",
+      "target": "multisend_page_handlereviewandsend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/send/page.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_src": "app_send_page_tsx",
+      "_tgt": "send_page_handlesend",
+      "source": "app_send_page_tsx",
+      "target": "send_page_handlesend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_getdb",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_getdb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_readall",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_readall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_writeitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_deleteitem",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_deleteitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_clearstore",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_clearstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_filterbyscope",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_filterbyscope",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L154",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_getalladdressbook",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_getalladdressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_getaddressbook",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_getaddressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_addaddressbookentry",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_addaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L175",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_updateaddressbookentry",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_updateaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_removeaddressbookentry",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_removeaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_getalltokenlist",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_getalltokenlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L195",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_gettokenlist",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_gettokenlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L200",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_addsavedtoken",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_addsavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L210",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_updatesavedtoken",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_updatesavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L220",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_removesavedtoken",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_removesavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_getcustomrpcs",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_getcustomrpcs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L230",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_setcustomrpc",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_setcustomrpc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L238",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_removecustomrpc",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_removecustomrpc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L248",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_exportuserdata",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_exportuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L263",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_importuserdata",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_importuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L309",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_validateimportdata",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_validateimportdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L318",
+      "weight": 1.0,
+      "_src": "lib_storage_ts",
+      "_tgt": "lib_storage_clearalldata",
+      "source": "lib_storage_ts",
+      "target": "lib_storage_clearalldata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_src": "lib_storage_readall",
+      "_tgt": "lib_storage_getdb",
+      "source": "lib_storage_getdb",
+      "target": "lib_storage_readall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_src": "lib_storage_writeitem",
+      "_tgt": "lib_storage_getdb",
+      "source": "lib_storage_getdb",
+      "target": "lib_storage_writeitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_src": "lib_storage_deleteitem",
+      "_tgt": "lib_storage_getdb",
+      "source": "lib_storage_getdb",
+      "target": "lib_storage_deleteitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_src": "lib_storage_clearstore",
+      "_tgt": "lib_storage_getdb",
+      "source": "lib_storage_getdb",
+      "target": "lib_storage_clearstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_src": "lib_storage_getalladdressbook",
+      "_tgt": "lib_storage_readall",
+      "source": "lib_storage_readall",
+      "target": "lib_storage_getalladdressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_src": "lib_storage_getalltokenlist",
+      "_tgt": "lib_storage_readall",
+      "source": "lib_storage_readall",
+      "target": "lib_storage_getalltokenlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L227",
+      "weight": 1.0,
+      "_src": "lib_storage_getcustomrpcs",
+      "_tgt": "lib_storage_readall",
+      "source": "lib_storage_readall",
+      "target": "lib_storage_getcustomrpcs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_src": "lib_storage_addaddressbookentry",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_addaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_src": "lib_storage_updateaddressbookentry",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_updateaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L206",
+      "weight": 1.0,
+      "_src": "lib_storage_addsavedtoken",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_addsavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_src": "lib_storage_updatesavedtoken",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_updatesavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L231",
+      "weight": 1.0,
+      "_src": "lib_storage_setcustomrpc",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_setcustomrpc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L278",
+      "weight": 1.0,
+      "_src": "lib_storage_importuserdata",
+      "_tgt": "lib_storage_writeitem",
+      "source": "lib_storage_writeitem",
+      "target": "lib_storage_importuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L186",
+      "weight": 1.0,
+      "_src": "lib_storage_removeaddressbookentry",
+      "_tgt": "lib_storage_deleteitem",
+      "source": "lib_storage_deleteitem",
+      "target": "lib_storage_removeaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_src": "lib_storage_removesavedtoken",
+      "_tgt": "lib_storage_deleteitem",
+      "source": "lib_storage_deleteitem",
+      "target": "lib_storage_removesavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "_src": "lib_storage_removecustomrpc",
+      "_tgt": "lib_storage_deleteitem",
+      "source": "lib_storage_deleteitem",
+      "target": "lib_storage_removecustomrpc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L319",
+      "weight": 1.0,
+      "_src": "lib_storage_clearalldata",
+      "_tgt": "lib_storage_clearstore",
+      "source": "lib_storage_clearstore",
+      "target": "lib_storage_clearalldata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_src": "lib_storage_getaddressbook",
+      "_tgt": "lib_storage_filterbyscope",
+      "source": "lib_storage_filterbyscope",
+      "target": "lib_storage_getaddressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_src": "lib_storage_gettokenlist",
+      "_tgt": "lib_storage_filterbyscope",
+      "source": "lib_storage_filterbyscope",
+      "target": "lib_storage_gettokenlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_src": "lib_storage_getaddressbook",
+      "_tgt": "lib_storage_getalladdressbook",
+      "source": "lib_storage_getalladdressbook",
+      "target": "lib_storage_getaddressbook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_src": "lib_storage_updateaddressbookentry",
+      "_tgt": "lib_storage_getalladdressbook",
+      "source": "lib_storage_getalladdressbook",
+      "target": "lib_storage_updateaddressbookentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L252",
+      "weight": 1.0,
+      "_src": "lib_storage_exportuserdata",
+      "_tgt": "lib_storage_getalladdressbook",
+      "source": "lib_storage_getalladdressbook",
+      "target": "lib_storage_exportuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L273",
+      "weight": 1.0,
+      "_src": "lib_storage_importuserdata",
+      "_tgt": "lib_storage_getalladdressbook",
+      "source": "lib_storage_getalladdressbook",
+      "target": "lib_storage_importuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L196",
+      "weight": 1.0,
+      "_src": "lib_storage_gettokenlist",
+      "_tgt": "lib_storage_getalltokenlist",
+      "source": "lib_storage_getalltokenlist",
+      "target": "lib_storage_gettokenlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_src": "lib_storage_updatesavedtoken",
+      "_tgt": "lib_storage_getalltokenlist",
+      "source": "lib_storage_getalltokenlist",
+      "target": "lib_storage_updatesavedtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L253",
+      "weight": 1.0,
+      "_src": "lib_storage_exportuserdata",
+      "_tgt": "lib_storage_getalltokenlist",
+      "source": "lib_storage_getalltokenlist",
+      "target": "lib_storage_exportuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L285",
+      "weight": 1.0,
+      "_src": "lib_storage_importuserdata",
+      "_tgt": "lib_storage_getalltokenlist",
+      "source": "lib_storage_getalltokenlist",
+      "target": "lib_storage_importuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L254",
+      "weight": 1.0,
+      "_src": "lib_storage_exportuserdata",
+      "_tgt": "lib_storage_getcustomrpcs",
+      "source": "lib_storage_getcustomrpcs",
+      "target": "lib_storage_exportuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/storage.ts",
+      "source_location": "L299",
+      "weight": 1.0,
+      "_src": "lib_storage_importuserdata",
+      "_tgt": "lib_storage_setcustomrpc",
+      "source": "lib_storage_setcustomrpc",
+      "target": "lib_storage_importuserdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "agents_nextjs_agent_rules",
+      "_tgt": "agents_graphify",
+      "source": "agents_nextjs_agent_rules",
+      "target": "agents_graphify"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "_src": "readme_multisender_dapp",
+      "_tgt": "readme_nextjs_framework",
+      "source": "readme_multisender_dapp",
+      "target": "readme_nextjs_framework"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 34",
+      "weight": 1.0,
+      "_src": "readme_multisender_dapp",
+      "_tgt": "readme_vercel_deployment",
+      "source": "readme_multisender_dapp",
+      "target": "readme_vercel_deployment"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "line 21",
+      "weight": 1.0,
+      "_src": "readme_multisender_dapp",
+      "_tgt": "readme_geist_font",
+      "source": "readme_multisender_dapp",
+      "target": "readme_geist_font"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "GEMINI.md",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "gemini_graphify_knowledge_graph",
+      "_tgt": "claude_agent_guidelines",
+      "source": "gemini_graphify_knowledge_graph",
+      "target": "claude_agent_guidelines"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "source_file": "public/window.svg",
+      "source_location": null,
+      "weight": 1.0,
+      "_src": "window_browser_window_icon",
+      "_tgt": "file_document_icon",
+      "source": "window_browser_window_icon",
+      "target": "file_document_icon"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "multi_send_workflow",
+      "label": "Multi-Send Transaction Workflow",
+      "nodes": [
+        "usemultisend_usemultisend",
+        "sendstepper_sendstepper",
+        "abi_multisender_abi",
+        "chains_multisender_addresses"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "hooks/useMultiSend.ts"
+    },
+    {
+      "id": "app_entry_context",
+      "label": "Application Context Wrappers",
+      "nodes": [
+        "themeprovider_themeprovider",
+        "web3provider_web3provider",
+        "layout_rootlayout"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "app/layout.tsx"
+    },
+    {
+      "id": "app_navigation_structure",
+      "label": "App Navigation Structure",
+      "nodes": [
+        "page_homepage",
+        "page_guidepage",
+        "page_donatepage",
+        "page_docspage",
+        "page_securitypage",
+        "page_sendpage"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/layout.tsx"
+    },
+    {
+      "id": "agents_graphify_workflow",
+      "label": "Graphify Workflow",
+      "nodes": [
+        "agents_graphify",
+        "agents_graphify_query",
+        "agents_graphify_path",
+        "agents_graphify_explain",
+        "agents_graphify_update"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "AGENTS.md"
+    },
+    {
+      "id": "nextjs_app_routing",
+      "label": "Next.js App Routing Structure",
+      "nodes": [
+        "layout_donatelayout",
+        "layout_sendlayout",
+        "next_env_nextjs_types"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "app/"
+    },
+    {
+      "id": "project_documentation",
+      "label": "Project Documentation and Agent Guidelines",
+      "nodes": [
+        "readme_multisender_dapp",
+        "gemini_graphify_knowledge_graph",
+        "claude_agent_guidelines"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "README.md"
+    }
+  ]
+}

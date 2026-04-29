@@ -3,11 +3,13 @@ import { PORTFOLIO_URL, GITHUB_URL } from "@/lib/constants";
 import { Zap, Code, ExternalLink } from "lucide-react";
 
 const FOOTER_LINKS = [
-  { href: "/send", label: "Send Tokens" },
-  { href: "/guide", label: "Guide" },
-  { href: "/docs", label: "Docs" },
+  { href: "/send", label: "Send" },
+  { href: "/multisend", label: "Multi Send" },
+  { href: "/approvals", label: "Approvals" },
   { href: "/security", label: "Security" },
-  { href: "/donate", label: "Donate" },
+  { href: "/docs", label: "Docs" },
+  { href: "/settings/address-book", label: "Settings" },
+  { href: "/guide", label: "Guide" },
 ];
 
 export default function Footer() {
@@ -17,12 +19,12 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 text-lg font-bold text-[var(--foreground)]">
+            <Link href="/" className="flex items-center gap-2 text-lg font-bold text-[var(--foreground)]">
               <Zap size={20} className="text-blue-500" />
               <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                MultiSender
+                SandWitch
               </span>
-            </div>
+            </Link>
             <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
               Send ERC20 tokens and native currency to multiple addresses in a single, gas-efficient transaction.
             </p>
@@ -81,7 +83,7 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col items-center gap-2 border-t border-[var(--border)] pt-6 sm:flex-row sm:justify-between">
           <p className="text-xs text-[var(--muted)]">
-            © {new Date().getFullYear()} MultiSender. Open-source &amp; non-custodial.
+            © {new Date().getFullYear()} SandWitch. Open-source &amp; non-custodial.
           </p>
           <a
             href={PORTFOLIO_URL}

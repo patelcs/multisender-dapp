@@ -21,10 +21,10 @@ export default function DonatePage() {
           <Heart size={32} className="text-white" />
         </div>
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Support <span className="gradient-text">MultiSender</span>
+          Support <span className="gradient-text">SandWitch</span>
         </h1>
         <p className="mt-4 text-lg text-[var(--muted)]">
-          MultiSender is free, open-source, and non-custodial. If you find it
+          SandWitch is free, open-source, and non-custodial. If you find it
           useful, consider supporting the developer with a donation.
         </p>
       </div>

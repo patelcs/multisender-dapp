@@ -1,195 +1,283 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Code2, Code, ArrowRight } from "lucide-react";
+import { 
+  ExternalLink, 
+  Code2, 
+  Code, 
+  ArrowRight, 
+  Cpu, 
+  ShieldCheck, 
+  Database, 
+  Globe, 
+  Zap,
+  Terminal,
+  ChevronRight
+} from "lucide-react";
 import { GITHUB_URL } from "@/lib/constants";
 import { SUPPORTED_CHAINS, MULTISENDER_ADDRESSES, EXPLORER_URLS } from "@/config/chains";
 
-export const metadata: Metadata = {
-  title: "Documentation",
-  description:
-    "Technical documentation for the MultiSender smart contract — function reference, data structures, and deployment info.",
-};
-
 export default function DocsPage() {
-  return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-        <span className="gradient-text">Contract</span> Documentation
-      </h1>
-      <p className="mt-4 text-lg text-[var(--muted)]">
-        Technical reference for the MultiSender smart contract. The contract is
-        open-source and non-custodial.
-      </p>
+  const [activeTab, setActiveTab] = useState<"contract" | "app">("contract");
 
-      {/* GitHub link */}
-      <div className="mt-8">
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
+      {/* Header */}
+      <div className="mb-12">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-center">
+          Technical <span className="gradient-text">Documentation</span>
+        </h1>
+        <p className="mt-4 text-lg text-[var(--muted)] text-center max-w-2xl mx-auto">
+          Deep dive into the SandWitch architecture, smart contracts, and technical specifications.
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="mb-12 flex justify-center gap-2">
+        <button
+          onClick={() => setActiveTab("contract")}
+          className={`flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
+            activeTab === "contract"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
+              : "bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <Cpu size={18} /> Smart Contract
+        </button>
+        <button
+          onClick={() => setActiveTab("app")}
+          className={`flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
+            activeTab === "app"
+              ? "bg-purple-600 text-white shadow-lg shadow-purple-500/25"
+              : "bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:text-[var(--foreground)]"
+          }`}
+        >
+          <Terminal size={18} /> App Architecture
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        {activeTab === "contract" ? <ContractDocs /> : <AppDocs />}
+      </div>
+
+      {/* Footer Links */}
+      <section className="mt-20 flex flex-wrap justify-center gap-4 border-t border-[var(--border)] pt-12">
         <a
           href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-5 py-3 text-sm font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50"
+          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold transition-all hover:bg-[var(--accent)]"
         >
-          <Code2 size={18} />
-          View Source on GitHub
-          <ExternalLink size={14} className="text-[var(--muted)]" />
+          <Code2 size={18} /> View Contract Source
         </a>
-      </div>
+        <Link
+          href="/security"
+          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold transition-all hover:bg-[var(--accent)]"
+        >
+          <ShieldCheck size={18} /> Security Overview
+        </Link>
+      </section>
+    </div>
+  );
+}
+
+function ContractDocs() {
+  return (
+    <div className="space-y-16">
+      {/* Overview */}
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-blue-500 rounded-full" /> Contract Overview
+        </h2>
+        <p className="text-[var(--muted)] leading-relaxed">
+          The SandWitch MultiSender is a stateless, non-custodial forwarder contract. 
+          It allows users to distribute ETH and ERC20 tokens to multiple addresses in a 
+          single atomic transaction, significantly reducing gas overhead and user friction.
+        </p>
+      </section>
 
       {/* Deployed Addresses */}
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold">Deployed Addresses</h2>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[var(--border)]">
-                <th className="py-3 text-left font-semibold text-[var(--muted)]">Chain</th>
-                <th className="py-3 text-left font-semibold text-[var(--muted)]">Address</th>
-                <th className="py-3 text-left font-semibold text-[var(--muted)]">Explorer</th>
-              </tr>
-            </thead>
-            <tbody>
-              {SUPPORTED_CHAINS.map((chain) => {
-                const addr = MULTISENDER_ADDRESSES[chain.id];
-                const explorer = EXPLORER_URLS[chain.id];
-                return (
-                  <tr key={chain.id} className="border-b border-[var(--border)]">
-                    <td className="py-3 font-medium">{chain.name}</td>
-                    <td className="py-3 font-mono text-xs text-[var(--muted)]">
-                      {addr}
-                    </td>
-                    <td className="py-3">
-                      <a
-                        href={`${explorer}/address/${addr}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-blue-500 hover:underline"
-                      >
-                        View <ExternalLink size={12} />
-                      </a>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-blue-500 rounded-full" /> Deployed Addresses
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {SUPPORTED_CHAINS.map((chain) => {
+            const addr = MULTISENDER_ADDRESSES[chain.id];
+            const explorer = EXPLORER_URLS[chain.id];
+            return (
+              <div key={chain.id} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-bold text-sm">{chain.name}</span>
+                  <a href={`${explorer}/address/${addr}`} target="_blank" className="text-blue-500 text-xs hover:underline flex items-center gap-1">
+                    Explorer <ExternalLink size={10} />
+                  </a>
+                </div>
+                <code className="block w-full bg-[var(--input-bg)] p-3 rounded-lg text-[10px] font-mono text-[var(--muted)] break-all border border-[var(--border)]">
+                  {addr}
+                </code>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* Data Structures */}
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold">Data Structures</h2>
-
-        <div className="mt-6 space-y-6">
-          <div className="glass-card p-5">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <Code size={16} className="text-blue-500" />
-              TokenReceiver
-            </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Represents a single token recipient with their address and the
-              amount to receive.
-            </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-[var(--input-bg)] p-4 text-sm">
-{`struct TokenReceiver {
-    address receiver;  // Recipient wallet address
-    uint256 amount;    // Amount in token's smallest unit (wei)
-}`}
-            </pre>
-          </div>
-
-          <div className="glass-card p-5">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <Code size={16} className="text-blue-500" />
-              TokenType (Enum)
-            </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Differentiates between native currency (ETH) and ERC20 tokens.
-            </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-[var(--input-bg)] p-4 text-sm">
-{`enum TokenType {
-    NATIVE,  // ETH / native currency
-    ERC20    // Any ERC20 token
-}`}
-            </pre>
-          </div>
-
-          <div className="glass-card p-5">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <Code size={16} className="text-blue-500" />
-              MultiSend
-            </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Groups a token type, token address, and an array of receivers — used by the{" "}
-              <code className="rounded bg-[var(--input-bg)] px-1.5 py-0.5 text-xs">send()</code>{" "}
-              function to batch multiple tokens.
-            </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-[var(--input-bg)] p-4 text-sm">
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-blue-500 rounded-full" /> Data Structures
+        </h2>
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--muted)] mb-4">MultiSend Struct</h3>
+            <pre className="overflow-x-auto rounded-xl bg-[var(--input-bg)] p-5 text-xs text-blue-400 leading-relaxed border border-[var(--border)]">
 {`struct MultiSend {
-    TokenType tokenType;       // NATIVE or ERC20
+    TokenType tokenType;       // 0: NATIVE, 1: ERC20
     address token;             // Token address (0x0 for native)
-    TokenReceiver[] receivers; // List of recipients
+    TokenReceiver[] receivers; // Array of {address, uint256}
 }`}
             </pre>
           </div>
         </div>
       </section>
 
-      {/* Functions */}
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold">Functions</h2>
+      {/* Logic */}
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-blue-500 rounded-full" /> Core Functions
+        </h2>
+        <div className="grid gap-6 md:grid-cols-2">
+          {[
+            { 
+              name: "sendNativeTokens", 
+              desc: "Distributes ETH. Automatically calculates total value required and refunds any excess msg.value to the sender." 
+            },
+            { 
+              name: "sendERC20Tokens", 
+              desc: "Distributes a specific ERC20 token. Uses OpenZeppelin SafeERC20 to handle non-standard token implementations." 
+            },
+            { 
+              name: "send", 
+              desc: "The universal entry point. Accepts an array of MultiSend structs, allowing mixed native and multi-token batches." 
+            },
+            { 
+              name: "emergencyWithdraw", 
+              desc: "Not applicable. The contract is stateless and holds zero funds between transactions." 
+            }
+          ].map((f) => (
+            <div key={f.name} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+              <h3 className="font-mono text-sm font-bold text-green-500 mb-2">{f.name}()</h3>
+              <p className="text-xs text-[var(--muted)] leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
 
-        <div className="mt-6 space-y-6">
-          <div className="glass-card p-5">
-            <h3 className="font-semibold text-green-500">
-              sendNativeTokens(receivers) → payable
-            </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Send native currency (ETH) to multiple receivers. Attach the total ETH
-              amount as <code className="rounded bg-[var(--input-bg)] px-1.5 py-0.5 text-xs">msg.value</code>.
-              Any excess ETH is automatically refunded to the sender.
+function AppDocs() {
+  return (
+    <div className="space-y-16">
+      {/* Technology Stack */}
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-purple-500 rounded-full" /> Technology Stack
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            { label: "Frontend", val: "Next.js 15 (React 19)" },
+            { label: "Blockchain", val: "Wagmi 2.x & Viem 2.x" },
+            { label: "Persistence", val: "IndexedDB (Browser)" },
+            { label: "Styling", val: "Tailwind CSS 4.x" },
+            { label: "Icons", val: "Lucide React" },
+            { label: "Deployment", val: "Vercel Edge" }
+          ].map((item) => (
+            <div key={item.label} className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] mb-1">{item.label}</div>
+              <div className="text-sm font-bold">{item.val}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Local Storage Architecture */}
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-purple-500 rounded-full" /> Local Data Architecture
+        </h2>
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="space-y-4">
+            <p className="text-[var(--muted)] leading-relaxed text-sm">
+              SandWitch follows a "Zero-Server" philosophy. All user data is persisted 
+              locally within the browser using IndexedDB. This ensures that your financial 
+              privacy is maintained and your contacts never leave your device.
             </p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-sm">
+                <Database size={16} className="text-purple-500" /> 
+                <span><strong>Address Book:</strong> Stored in <code>contacts</code> object store.</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Zap size={16} className="text-purple-500" /> 
+                <span><strong>Token List:</strong> Stored in <code>tokens</code> with chain-specific ID.</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Globe size={16} className="text-purple-500" /> 
+                <span><strong>RPC Config:</strong> Stored in <code>rpc_config</code> for dynamic overrides.</span>
+              </div>
+            </div>
           </div>
-
-          <div className="glass-card p-5">
-            <h3 className="font-semibold text-green-500">
-              sendERC20Tokens(token, receivers)
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent)] p-6">
+            <h3 className="font-bold text-sm mb-4 flex items-center gap-2">
+              <Code size={14} /> Data Portability (JSON Schema)
             </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Send an ERC20 token to multiple receivers. Requires prior{" "}
-              <code className="rounded bg-[var(--input-bg)] px-1.5 py-0.5 text-xs">approve()</code>{" "}
-              of the MultiSender contract for the total amount.
-              Uses <code className="rounded bg-[var(--input-bg)] px-1.5 py-0.5 text-xs">SafeERC20.safeTransferFrom</code>{" "}
-              for maximum safety.
+            <p className="text-xs text-[var(--muted)] mb-4">
+              The Import/Export feature uses a unified JSON schema containing all three 
+              stores. This allows seamless migration between browsers.
             </p>
-          </div>
-
-          <div className="glass-card p-5">
-            <h3 className="font-semibold text-green-500">
-              send(multiSends[]) → payable
-            </h3>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              The master function — send <strong>multiple different tokens</strong>{" "}
-              (both native and ERC20) to multiple receivers in a single transaction.
-              Requires prior ERC20 approvals and the total native value attached.
-            </p>
+            <code className="block bg-[var(--card)] p-3 rounded-lg text-[10px] font-mono text-purple-400 border border-[var(--border)]">
+{`{
+  "version": 1,
+  "contacts": [...],
+  "tokens": [...],
+  "rpc_config": {...}
+}`}
+            </code>
           </div>
         </div>
       </section>
 
-      {/* Internal links */}
-      <section className="mt-16 flex flex-col gap-4 sm:flex-row">
-        <Link
-          href="/security"
-          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-medium transition-all hover:border-blue-500/50 hover:bg-[var(--accent)]"
-        >
-          Security Details <ArrowRight size={14} />
-        </Link>
-        <Link
-          href="/guide"
-          className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-medium transition-all hover:border-blue-500/50 hover:bg-[var(--accent)]"
-        >
-          Usage Guide <ArrowRight size={14} />
-        </Link>
+      {/* RPC & Custom Networks */}
+      <section>
+        <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
+          <div className="h-8 w-1 bg-purple-500 rounded-full" /> Dynamic RPC Override
+        </h2>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8">
+          <p className="text-sm text-[var(--muted)] leading-relaxed mb-6">
+            SandWitch uses a custom Wagmi transport layer. It prioritizes user-defined 
+            RPCs found in the local database before falling back to public infrastructure. 
+            This is managed by the <code>createWagmiConfig()</code> utility in <code>@/config/wagmi.ts</code>.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex items-start gap-3">
+              <ChevronRight size={14} className="mt-1 text-purple-500" />
+              <div>
+                <div className="font-bold text-sm">Low Latency</div>
+                <p className="text-xs text-[var(--muted)]">Connect to your nearest local node.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <ChevronRight size={14} className="mt-1 text-purple-500" />
+              <div>
+                <div className="font-bold text-sm">Privacy</div>
+                <p className="text-xs text-[var(--muted)]">Bypass public RPC tracking/logging.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

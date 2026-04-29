@@ -8,12 +8,12 @@ import ConnectButton from "@/components/wallet/ConnectButton";
 import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Portfolio" },
+  { href: "/getting-started", label: "Getting Started" },
   { href: "/send", label: "Send" },
-  { href: "/guide", label: "Guide" },
-  { href: "/docs", label: "Docs" },
-  { href: "/security", label: "Security" },
-  { href: "/donate", label: "Donate" },
+  { href: "/multisend", label: "Multi Send" },
+  { href: "/approvals", label: "Approvals" },
+  { href: "/settings/address-book", label: "Settings" },
 ];
 
 export default function Navbar() {
@@ -28,7 +28,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 text-lg font-bold text-[var(--foreground)]">
           <Zap size={22} className="text-blue-500" />
           <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            MultiSender
+            SandWitch
           </span>
         </Link>
 

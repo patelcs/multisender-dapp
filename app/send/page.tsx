@@ -1,256 +1,209 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Plus, Send, AlertCircle, Wallet } from "lucide-react";
-import { useAccount, useChainId } from "wagmi";
-import { parseUnits, isAddress } from "viem";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Send, Wallet, Loader2 } from "lucide-react";
+import { useAccount, useChainId, useSendTransaction, useWriteContract } from "wagmi";
+import { parseUnits, isAddress, getAddress, formatUnits } from "viem";
 import toast from "react-hot-toast";
-import TokenGroup, { type TokenGroupData } from "@/components/send/TokenGroup";
-import SendStepper from "@/components/send/SendStepper";
-import ConnectButton from "@/components/wallet/ConnectButton";
+import TokenSelector from "@/components/send/TokenSelector";
+import AddressInput from "@/components/ui/AddressInput";
+import { ERC20_ABI } from "@/config/abi";
 import InfoBanner from "@/components/ui/InfoBanner";
-import { MULTISENDER_ADDRESSES, NATIVE_CURRENCY } from "@/config/chains";
-import { useTokenInfo } from "@/hooks/useTokenInfo";
-import type { MultiSendGroup } from "@/hooks/useMultiSend";
 
-function createEmptyGroup(): TokenGroupData {
-  return {
-    id: crypto.randomUUID(),
-    isNative: true,
-    tokenAddress: "",
-    recipients: [{ id: crypto.randomUUID(), address: "", amount: "" }],
-  };
-}
-
-export default function SendPage() {
+export default function SingleSendPage() {
   const { isConnected } = useAccount();
   const chainId = useChainId();
-  const contractAddress = MULTISENDER_ADDRESSES[chainId];
-  const nativeCurrency = NATIVE_CURRENCY[chainId] ?? { symbol: "ETH", decimals: 18 };
 
-  const [groups, setGroups] = useState<TokenGroupData[]>([createEmptyGroup()]);
-  const [showStepper, setShowStepper] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  // Form State
+  const [tokenAddress, setTokenAddress] = useState("");
+  const [isNative, setIsNative] = useState<boolean>(false);
+  const [recipient, setRecipient] = useState("");
+  const [amount, setAmount] = useState("");
+  const [isPending, setIsPending] = useState(false);
+  
+  // Token Info State
+  const [tokenInfo, setTokenInfo] = useState<{
+    name: string;
+    symbol: string;
+    decimals: number;
+    balance?: bigint;
+  }>({
+    name: "",
+    symbol: "",
+    decimals: 18,
+  });
 
-  const addGroup = () => {
-    setGroups((g) => [...g, createEmptyGroup()]);
-  };
+  // Actions
+  const { sendTransactionAsync } = useSendTransaction();
+  const { writeContractAsync } = useWriteContract();
 
-  const removeGroup = (id: string) => {
-    if (groups.length <= 1) return;
-    setGroups((g) => g.filter((grp) => grp.id !== id));
-  };
-
-  const updateGroup = (id: string, updated: TokenGroupData) => {
-    setGroups((g) => g.map((grp) => (grp.id === id ? updated : grp)));
-  };
-
-  // Validation
-  const validate = (): boolean => {
-    const errors: string[] = [];
-
-    if (!contractAddress || contractAddress === "0x0000000000000000000000000000000000000000") {
-      errors.push("MultiSender contract is not deployed on this chain yet.");
-    }
-
-    groups.forEach((group, gi) => {
-      const label = `Token Group #${gi + 1}`;
-
-      if (!group.isNative && !isAddress(group.tokenAddress)) {
-        errors.push(`${label}: Invalid ERC20 token address.`);
-      }
-
-      const validRecipients = group.recipients.filter(
-        (r) => r.address.trim() || r.amount.trim()
-      );
-
-      if (validRecipients.length === 0) {
-        errors.push(`${label}: Add at least one recipient.`);
-      }
-
-      validRecipients.forEach((r, ri) => {
-        if (!isAddress(r.address)) {
-          errors.push(`${label}, Recipient ${ri + 1}: Invalid address.`);
-        }
-        const amt = parseFloat(r.amount);
-        if (isNaN(amt) || amt <= 0) {
-          errors.push(`${label}, Recipient ${ri + 1}: Invalid amount.`);
-        }
-      });
-    });
-
-    setValidationErrors(errors);
-    return errors.length === 0;
-  };
-
-  // Build send data
-  const buildSendData = (): {
-    approvalSteps: { tokenAddress: `0x${string}`; tokenSymbol: string; requiredAmount: bigint }[];
-    sendGroups: MultiSendGroup[];
-  } => {
-    const approvalSteps: { tokenAddress: `0x${string}`; tokenSymbol: string; requiredAmount: bigint }[] = [];
-    const sendGroups: MultiSendGroup[] = [];
-
-    groups.forEach((group) => {
-      const decimals = group.isNative ? nativeCurrency.decimals : 18; // Default to 18 for ERC20
-
-      const receivers = group.recipients
-        .filter((r) => r.address.trim() && r.amount.trim() && parseFloat(r.amount) > 0)
-        .map((r) => ({
-          receiver: r.address as `0x${string}`,
-          amount: parseUnits(r.amount, decimals),
-        }));
-
-      if (receivers.length === 0) return;
-
-      if (group.isNative) {
-        sendGroups.push({
-          tokenType: 0,
-          token: "0x0000000000000000000000000000000000000000",
-          receivers,
-        });
-      } else {
-        const tokenAddr = group.tokenAddress as `0x${string}`;
-        const totalAmount = receivers.reduce((sum, r) => sum + r.amount, 0n);
-
-        approvalSteps.push({
-          tokenAddress: tokenAddr,
-          tokenSymbol: "ERC20", // Will be resolved by the stepper
-          requiredAmount: totalAmount,
-        });
-
-        sendGroups.push({
-          tokenType: 1,
-          token: tokenAddr,
-          receivers,
-        });
-      }
-    });
-
-    return { approvalSteps, sendGroups };
-  };
-
-  const handleReviewAndSend = () => {
-    if (!validate()) {
-      toast.error("Please fix the validation errors before proceeding.");
+  const handleSend = async () => {
+    if (!isConnected) {
+      toast.error("Connect your wallet first");
       return;
     }
-    setShowStepper(true);
+
+    if (!isAddress(recipient)) {
+      toast.error("Invalid recipient address");
+      return;
+    }
+
+    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+      toast.error("Invalid amount");
+      return;
+    }
+
+    const units = parseUnits(amount, tokenInfo.decimals);
+    
+    if (tokenInfo.balance !== undefined && units > tokenInfo.balance) {
+      toast.error(`Insufficient ${tokenInfo.symbol} balance`);
+      return;
+    }
+
+    setIsPending(true);
+    const tid = toast.loading(`Sending ${amount} ${tokenInfo.symbol}...`);
+
+    try {
+      if (isNative) {
+        await sendTransactionAsync({
+          to: recipient as `0x${string}`,
+          value: units,
+        });
+      } else {
+        await writeContractAsync({
+          address: getAddress(tokenAddress),
+          abi: ERC20_ABI,
+          functionName: "transfer",
+          args: [recipient as `0x${string}`, units],
+        });
+      }
+
+      toast.success("Transaction sent!", { id: tid });
+      setAmount("");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.shortMessage || err.message || "Transaction failed", { id: tid });
+    } finally {
+      setIsPending(false);
+    }
   };
-
-  const { approvalSteps, sendGroups } = useMemo(buildSendData, [groups, nativeCurrency.decimals]);
-
-  // Summary stats
-  const totalRecipients = groups.reduce((s, g) => s + g.recipients.filter((r) => r.address.trim()).length, 0);
-  const totalTokens = groups.length;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          <span className="gradient-text">Send</span> Tokens
+          <span className="gradient-text">Send</span>
         </h1>
         <p className="mt-2 text-[var(--muted)]">
-          Add tokens, configure recipients, and send everything in one transaction.
+          Quickly transfer tokens to another address using the standard token contract.
         </p>
       </div>
 
       {!isConnected ? (
-        <div className="flex flex-col items-center gap-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-12 text-center">
+        <div className="flex flex-col items-center gap-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-12 text-center shadow-sm">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">
             <Wallet size={32} />
           </div>
           <div>
             <h2 className="text-xl font-bold">Connect Your Wallet</h2>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Connect a wallet to start sending tokens to multiple addresses.
+            <p className="mt-2 text-sm text-[var(--muted)] max-w-xs">
+              Connect a wallet to start sending tokens securely across any network.
             </p>
           </div>
-          <ConnectButton />
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Token groups */}
-          {groups.map((group, i) => (
-            <TokenGroup
-              key={group.id}
-              group={group}
-              index={i}
-              totalGroups={groups.length}
-              otherGroups={groups.filter((g) => g.id !== group.id)}
-              onChange={(updated) => updateGroup(group.id, updated)}
-              onRemove={() => removeGroup(group.id)}
-            />
-          ))}
-
-          {/* Add token group */}
-          <button
-            onClick={addGroup}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--border)] py-4 text-sm font-medium text-[var(--muted)] transition-all hover:border-blue-500/50 hover:text-blue-500 hover:bg-blue-500/5"
-          >
-            <Plus size={18} />
-            Add Another Token
-          </button>
-
-          {/* Validation errors */}
-          {validationErrors.length > 0 && (
-            <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-red-500">
-                <AlertCircle size={16} />
-                Please fix the following errors:
-              </p>
-              <ul className="list-disc pl-6 space-y-1">
-                {validationErrors.map((err, i) => (
-                  <li key={i} className="text-sm text-red-400">
-                    {err}
-                  </li>
-                ))}
-              </ul>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm space-y-6">
+            {/* Token Selection */}
+            <div className="space-y-3">
+              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] pl-1">Select Asset</label>
+              <TokenSelector
+                isNative={isNative}
+                tokenAddress={tokenAddress}
+                tokenSymbol={tokenInfo.symbol}
+                decimals={tokenInfo.decimals}
+                balance={tokenInfo.balance}
+                chainId={chainId}
+                onToggleNative={(val) => {
+                  setIsNative(val);
+                  if (val) setTokenAddress("");
+                  setTokenInfo({ name: "", symbol: "", decimals: 18 });
+                }}
+                onAddressChange={setTokenAddress}
+                onInfoChange={(info) => setTokenInfo(info)}
+                onPickToken={(t) => {
+                  setTokenAddress(t.address);
+                  setIsNative(false);
+                }}
+              />
             </div>
-          )}
 
-          {/* Summary + Send button */}
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-6 text-sm text-[var(--muted)]">
-                <span>
-                  <strong className="text-[var(--foreground)]">{totalTokens}</strong> token
-                  {totalTokens !== 1 ? "s" : ""}
-                </span>
-                <span>
-                  <strong className="text-[var(--foreground)]">{totalRecipients}</strong> recipient
-                  {totalRecipients !== 1 ? "s" : ""}
-                </span>
+            {/* Recipient Input with Auto-suggest */}
+            <div className="space-y-3">
+              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] pl-1">
+                Recipient Address
+              </label>
+              <AddressInput
+                value={recipient}
+                onChange={setRecipient}
+                placeholder="0x..."
+              />
+            </div>
+
+            {/* Amount Input */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center px-1">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Amount</label>
+                {tokenInfo.symbol && tokenInfo.balance !== undefined && (
+                  <button 
+                    onClick={() => setAmount(formatUnits(tokenInfo.balance!, tokenInfo.decimals))}
+                    className="text-[10px] font-bold text-blue-500 hover:underline"
+                  >
+                    Max: {Number(formatUnits(tokenInfo.balance!, tokenInfo.decimals)).toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                  </button>
+                )}
               </div>
-              <button
-                onClick={handleReviewAndSend}
-                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <Send size={16} />
-                Review & Send
-              </button>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3.5 text-lg font-bold transition-colors focus:border-blue-500/50 outline-none pr-20"
+                />
+                {tokenInfo.symbol && (
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-[var(--muted)] text-sm">
+                    {tokenInfo.symbol}
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* Action Button */}
+            <button
+              onClick={handleSend}
+              disabled={isPending || !recipient || !amount || !tokenInfo.symbol}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.01] hover:shadow-blue-500/30 active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  Send {tokenInfo.symbol || "Asset"}
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Security info */}
-          <InfoBanner variant="security" title="Your funds are safe">
-            The MultiSender contract is non-custodial — it forwards tokens directly to recipients
-            in the same transaction. It never stores, holds, or locks your tokens. ERC20 approvals
-            are requested for the exact required amount only.
+          <InfoBanner variant="info" title="Direct Transfer">
+            This feature performs a direct <code>transfer()</code> call on the token contract. 
+            It does not use the SandWitch multi-send contract, making it perfect for simple one-to-one transfers.
           </InfoBanner>
         </div>
-      )}
-
-      {/* Stepper modal */}
-      {showStepper && (
-        <SendStepper
-          approvalSteps={approvalSteps}
-          sendGroups={sendGroups}
-          onClose={() => setShowStepper(false)}
-          onSuccess={() => {
-            toast.success("All tokens sent successfully!");
-          }}
-        />
       )}
     </div>
   );

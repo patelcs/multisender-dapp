@@ -17,7 +17,7 @@ import { mainnet, sepolia } from "wagmi/chains";
 
 export const SUPPORTED_CHAINS = [mainnet, sepolia] as const;
 
-/** MultiSender contract address per chain ID */
+/** SandWitch contract address per chain ID */
 export const MULTISENDER_ADDRESSES: Record<number, `0x${string}`> = {
   [mainnet.id]: "0x0000000000000000000000000000000000000000", // TODO: replace with deployed address
   [sepolia.id]: "0x9025d62b6fBc72f7027Df204Cc32a702B19Be642",

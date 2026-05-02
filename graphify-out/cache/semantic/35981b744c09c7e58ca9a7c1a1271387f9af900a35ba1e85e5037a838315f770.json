@@ -1,0 +1,1 @@
+{"nodes": [{"id": "send_recipientlist", "label": "RecipientList", "file_type": "code", "source_file": "components/send/RecipientList.tsx"}], "edges": [{"source": "send_recipientlist", "target": "ui_addressinput", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "components/send/RecipientList.tsx"}], "hyperedges": []}

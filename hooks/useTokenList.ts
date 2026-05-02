@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useAccount, useChainId } from "wagmi";
+import { useConnection, useChainId } from "wagmi";
 import {
   getTokenList,
   getAllTokenList,
@@ -31,7 +31,7 @@ export interface TokenEntry {
  * Merges build-time defaults from config/tokens.ts with user-saved tokens.
  */
 export function useTokenList(filteredByChain: boolean = true) {
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const chainId = useChainId();
   const [savedTokens, setSavedTokens] = useState<SavedToken[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +39,9 @@ export function useTokenList(filteredByChain: boolean = true) {
 
   useEffect(() => {
     let mounted = true;
-    setIsLoading(true);
+    Promise.resolve().then(() => {
+      setIsLoading(true);
+    });
     
     const fetchTokens = async () => {
       if (filteredByChain) {

@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Send, Wallet, Loader2 } from "lucide-react";
-import { useAccount, useChainId, useSendTransaction, useWriteContract } from "wagmi";
+import { useConnection, useChainId, useSendTransaction, useWriteContract } from "wagmi";
 import { parseUnits, isAddress, getAddress, formatUnits } from "viem";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import TokenSelector from "@/components/send/TokenSelector";
 import AddressInput from "@/components/ui/AddressInput";
 import { ERC20_ABI } from "@/config/abi";
 import InfoBanner from "@/components/ui/InfoBanner";
 
-export default function SingleSendPage() {
-  const { isConnected } = useAccount();
+function SingleSendContent() {
+  const { isConnected } = useConnection();
   const chainId = useChainId();
+  const searchParams = useSearchParams();
 
   // Form State
   const [tokenAddress, setTokenAddress] = useState("");
@@ -21,6 +23,18 @@ export default function SingleSendPage() {
   const [amount, setAmount] = useState("");
   const [isPending, setIsPending] = useState(false);
   
+  // Pre-fill from URL
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      const isTokenNative = token === "0x0000000000000000000000000000000000000000";
+      Promise.resolve().then(() => {
+        setIsNative(isTokenNative);
+        setTokenAddress(isTokenNative ? "" : token);
+      });
+    }
+  }, [searchParams]);
+
   // Token Info State
   const [tokenInfo, setTokenInfo] = useState<{
     name: string;
@@ -80,43 +94,44 @@ export default function SingleSendPage() {
 
       toast.success("Transaction sent!", { id: tid });
       setAmount("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.shortMessage || err.message || "Transaction failed", { id: tid });
+      const errorMessage = err instanceof Error ? (err as { shortMessage?: string }).shortMessage || err.message : "Transaction failed";
+      toast.error(errorMessage, { id: tid });
     } finally {
       setIsPending(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mb-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           <span className="gradient-text">Send</span>
         </h1>
-        <p className="mt-2 text-[var(--muted)]">
+        <p className="mt-2 text-sm sm:text-base text-(--muted)">
           Quickly transfer tokens to another address using the standard token contract.
         </p>
       </div>
 
       {!isConnected ? (
-        <div className="flex flex-col items-center gap-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-12 text-center shadow-sm">
+        <div className="flex flex-col items-center gap-6 rounded-2xl border border-(--border) bg-(--card) p-12 text-center shadow-sm">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">
             <Wallet size={32} />
           </div>
           <div>
             <h2 className="text-xl font-bold">Connect Your Wallet</h2>
-            <p className="mt-2 text-sm text-[var(--muted)] max-w-xs">
+            <p className="mt-2 text-sm text-(--muted) max-w-xs">
               Connect a wallet to start sending tokens securely across any network.
             </p>
           </div>
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm space-y-6">
+          <div className="rounded-2xl border border-(--border) bg-(--card) p-6 shadow-sm space-y-6">
             {/* Token Selection */}
             <div className="space-y-3">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] pl-1">Select Asset</label>
+              <label className="text-[10px] font-bold uppercase tracking-wider text-(--muted) pl-1">Select Asset</label>
               <TokenSelector
                 isNative={isNative}
                 tokenAddress={tokenAddress}
@@ -140,20 +155,21 @@ export default function SingleSendPage() {
 
             {/* Recipient Input with Auto-suggest */}
             <div className="space-y-3">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] pl-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider text-(--muted) pl-1">
                 Recipient Address
               </label>
               <AddressInput
                 value={recipient}
                 onChange={setRecipient}
                 placeholder="0x..."
+                chainId={chainId}
               />
             </div>
 
             {/* Amount Input */}
             <div className="space-y-3">
               <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">Amount</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-(--muted)">Amount</label>
                 {tokenInfo.symbol && tokenInfo.balance !== undefined && (
                   <button 
                     onClick={() => setAmount(formatUnits(tokenInfo.balance!, tokenInfo.decimals))}
@@ -169,10 +185,10 @@ export default function SingleSendPage() {
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3.5 text-lg font-bold transition-colors focus:border-blue-500/50 outline-none pr-20"
+                  className="w-full rounded-xl border border-(--border) bg-(--input-bg) px-4 py-3.5 text-lg font-bold transition-colors focus:border-blue-500/50 outline-none pr-20"
                 />
                 {tokenInfo.symbol && (
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-[var(--muted)] text-sm">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-(--muted) text-sm">
                     {tokenInfo.symbol}
                   </div>
                 )}
@@ -183,7 +199,7 @@ export default function SingleSendPage() {
             <button
               onClick={handleSend}
               disabled={isPending || !recipient || !amount || !tokenInfo.symbol}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.01] hover:shadow-blue-500/30 active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-blue-600 to-purple-600 py-4 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.01] hover:shadow-blue-500/30 active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100"
             >
               {isPending ? (
                 <>
@@ -201,10 +217,22 @@ export default function SingleSendPage() {
 
           <InfoBanner variant="info" title="Direct Transfer">
             This feature performs a direct <code>transfer()</code> call on the token contract. 
-            It does not use the SandWitch multi-send contract, making it perfect for simple one-to-one transfers.
+            It does not use the Sandwich multi-send contract, making it perfect for simple one-to-one transfers.
           </InfoBanner>
         </div>
       )}
     </div>
+  );
+}
+
+export default function SingleSendPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-[50vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    }>
+      <SingleSendContent />
+    </Suspense>
   );
 }

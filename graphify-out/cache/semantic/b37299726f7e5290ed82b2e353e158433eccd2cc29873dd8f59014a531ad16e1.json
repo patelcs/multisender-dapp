@@ -1,0 +1,1 @@
+{"nodes": [{"id": "config_wagmi", "label": "Wagmi Config Factory", "file_type": "code", "source_file": "config/wagmi.ts"}], "edges": [{"source": "config_wagmi", "target": "config_chains", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "config/wagmi.ts"}], "hyperedges": []}

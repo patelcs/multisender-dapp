@@ -17,10 +17,10 @@ export default function Web3Provider({ children }: { children: React.ReactNode }
 
   if (!config) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+      <div className="flex min-h-screen items-center justify-center bg-(--background)">
         <div className="flex flex-col items-center gap-4">
           <Loader2 size={40} className="animate-spin text-blue-500" />
-          <p className="text-sm font-medium text-[var(--muted)]">Initializing Web3...</p>
+          <p className="text-sm font-medium text-(--muted)">Initializing Web3...</p>
         </div>
       </div>
     );

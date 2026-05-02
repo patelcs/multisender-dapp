@@ -3,17 +3,17 @@
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { ERC20_ABI } from "@/config/abi";
 import { MULTISENDER_ADDRESSES } from "@/config/chains";
-import { useChainId, useAccount } from "wagmi";
+import { useChainId, useConnection } from "wagmi";
 
 /**
- * Hook to check and request ERC20 approval for the SandWitch contract.
+ * Hook to check and request ERC20 approval for the Sandwich contract.
  */
 export function useTokenApproval(
   tokenAddress: `0x${string}` | undefined,
   requiredAmount: bigint
 ) {
   const chainId = useChainId();
-  const { address: userAddress } = useAccount();
+  const { address: userAddress } = useConnection();
   const spender = MULTISENDER_ADDRESSES[chainId];
 
   const enabled =

@@ -15,7 +15,9 @@ export function useRPCConfig() {
   }, []);
 
   useEffect(() => {
-    refresh();
+    Promise.resolve().then(() => {
+      refresh();
+    });
   }, [refresh]);
 
   const update = async (chainId: number, url: string) => {

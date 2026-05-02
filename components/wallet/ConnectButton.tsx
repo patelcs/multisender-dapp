@@ -1,13 +1,13 @@
 "use client";
 
-import { useConnect, useDisconnect, useAccount, useChainId, useSwitchChain } from "wagmi";
+import { useConnect, useDisconnect, useConnection, useChainId, useSwitchChain } from "wagmi";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Wallet, LogOut, Copy, Check, ExternalLink } from "lucide-react";
 import { SUPPORTED_CHAINS, EXPLORER_URLS } from "@/config/chains";
 
 export default function ConnectButton() {
-  const { address, isConnected, connector } = useAccount();
+  const { address, isConnected, connector } = useConnection();
   const chainId = useChainId();
   const { connectors, connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -24,7 +24,9 @@ export default function ConnectButton() {
 
   // Close dropdowns on outside click
   useEffect(() => {
-    setMounted(true);
+    Promise.resolve().then(() => {
+      setMounted(true);
+    });
     function handleClick(e: MouseEvent) {
       if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
         setShowAccountMenu(false);
@@ -65,12 +67,12 @@ export default function ConnectButton() {
         {/* Wallet selection modal via Portal to escape Navbar's backdrop-filter containing block */}
         {mounted && showWalletModal && createPortal(
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-sm rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full max-w-sm rounded-2xl border border-(--border) bg-(--card) p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="mb-6 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-[var(--foreground)]">Connect Wallet</h3>
+                <h3 className="text-lg font-bold text-(--foreground)">Connect Wallet</h3>
                 <button
                   onClick={() => setShowWalletModal(false)}
-                  className="text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                  className="text-(--muted) hover:text-(--foreground) transition-colors"
                 >
                   ✕
                 </button>
@@ -83,14 +85,14 @@ export default function ConnectButton() {
                       connect({ connector: c });
                       setShowWalletModal(false);
                     }}
-                    className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50 hover:bg-blue-500/5"
+                    className="flex items-center gap-3 rounded-xl border border-(--border) bg-(--background) px-4 py-3 text-sm font-medium text-(--foreground) transition-all hover:border-blue-500/50 hover:bg-blue-500/5"
                   >
                     <Wallet size={18} className="text-blue-500" />
                     {c.name}
                   </button>
                 ))}
               </div>
-              <p className="mt-4 text-center text-xs text-[var(--muted)]">
+              <p className="mt-4 text-center text-xs text-(--muted)">
                 By connecting, you agree to the terms of service.
               </p>
             </div>
@@ -107,14 +109,14 @@ export default function ConnectButton() {
       <div ref={chainRef} className="relative">
         <button
           onClick={() => setShowChainMenu((p) => !p)}
-          className="flex items-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50"
+          className="flex items-center gap-1.5 rounded-xl border border-(--border) bg-(--card) px-3 py-2 text-sm font-medium text-(--foreground) transition-all hover:border-blue-500/50"
         >
           <span className="hidden sm:inline">{currentChain?.name ?? "Unknown"}</span>
           <span className="sm:hidden">{currentChain?.nativeCurrency.symbol ?? "?"}</span>
           <ChevronDown size={14} />
         </button>
         {showChainMenu && (
-          <div className="absolute right-0 top-full z-40 mt-2 w-48 rounded-xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
+          <div className="absolute right-0 top-full z-40 mt-2 w-48 rounded-xl border border-(--border) bg-(--card) p-2 shadow-xl">
             {SUPPORTED_CHAINS.map((chain) => (
               <button
                 key={chain.id}
@@ -125,7 +127,7 @@ export default function ConnectButton() {
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                   chain.id === chainId
                     ? "bg-blue-500/10 text-blue-500 font-medium"
-                    : "text-[var(--foreground)] hover:bg-[var(--accent)]"
+                    : "text-(--foreground) hover:bg-(--accent)"
                 }`}
               >
                 {chain.name}
@@ -139,21 +141,21 @@ export default function ConnectButton() {
       <div ref={accountRef} className="relative">
         <button
           onClick={() => setShowAccountMenu((p) => !p)}
-          className="flex items-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50"
+          className="flex items-center gap-1.5 rounded-xl border border-(--border) bg-(--card) px-3 py-2 text-sm font-medium text-(--foreground) transition-all hover:border-blue-500/50"
         >
           <span className="h-2 w-2 rounded-full bg-green-500" />
           {truncatedAddress}
           <ChevronDown size={14} />
         </button>
         {showAccountMenu && (
-          <div className="absolute right-0 top-full z-40 mt-2 w-56 rounded-xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
+          <div className="absolute right-0 top-full z-40 mt-2 w-56 rounded-xl border border-(--border) bg-(--card) p-2 shadow-xl">
             <div className="mb-2 px-3 py-2">
-              <p className="text-xs text-[var(--muted)]">Connected with {connector?.name}</p>
-              <p className="mt-1 font-mono text-sm text-[var(--foreground)]">{truncatedAddress}</p>
+              <p className="text-xs text-(--muted)">Connected with {connector?.name}</p>
+              <p className="mt-1 font-mono text-sm text-(--foreground)">{truncatedAddress}</p>
             </div>
             <button
               onClick={copyAddress}
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--accent)]"
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-(--foreground) transition-colors hover:bg-(--accent)"
             >
               {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
               {copied ? "Copied!" : "Copy Address"}
@@ -163,7 +165,7 @@ export default function ConnectButton() {
                 href={`${EXPLORER_URLS[chainId] ?? "#"}/address/${address}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--accent)]"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-(--foreground) transition-colors hover:bg-(--accent)"
               >
                 <ExternalLink size={14} />
                 View on Explorer

@@ -1,5 +1,5 @@
 /**
- * SandWitch contract ABI — derived from the Solidity ISandWitch interface.
+ * Sandwich contract ABI — derived from the Solidity ISandwich interface.
  */
 export const MULTISENDER_ABI = [
   {

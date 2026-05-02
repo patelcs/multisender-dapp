@@ -1,1 +1,0 @@
-{"nodes": [{"id": "themeprovider_themeprovider", "label": "Theme Provider", "file_type": "code", "source_file": "providers/ThemeProvider.tsx", "rationale": "Prevents flash of unstyled content by waiting for client-side mount before rendering theme-dependent components."}], "edges": [], "hyperedges": []}

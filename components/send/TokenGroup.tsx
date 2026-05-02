@@ -22,7 +22,8 @@ interface TokenGroupProps {
   index: number;
   totalGroups: number;
   otherGroups: TokenGroupData[];
-  onChange: (updated: Partial<TokenGroupData>) => void;
+  chainId?: number;
+  onChange: (updater: Partial<TokenGroupData> | ((prev: TokenGroupData) => Partial<TokenGroupData>)) => void;
   onRemove: () => void;
 }
 
@@ -31,6 +32,7 @@ export default function TokenGroup({
   index,
   totalGroups,
   otherGroups,
+  chainId,
   onChange,
   onRemove,
 }: TokenGroupProps) {
@@ -41,9 +43,15 @@ export default function TokenGroup({
 
   const updateField = <K extends keyof TokenGroupData>(
     field: K,
-    value: TokenGroupData[K]
+    value: TokenGroupData[K] | ((prev: TokenGroupData[K]) => TokenGroupData[K])
   ) => {
-    onChange({ [field]: value });
+    if (typeof value === 'function') {
+      onChange((prev) => ({ 
+        [field]: (value as (p: TokenGroupData[K]) => TokenGroupData[K])(prev[field]) 
+      }));
+    } else {
+      onChange({ [field]: value });
+    }
   };
 
   const updateTokenInfo = useCallback((info: { name: string; symbol: string; decimals: number; balance?: bigint }) => {
@@ -65,12 +73,12 @@ export default function TokenGroup({
   };
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] overflow-hidden transition-all">
+    <div className="rounded-2xl border border-(--border) bg-(--card) overflow-hidden transition-all">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--accent)] px-5 py-3">
+      <div className="flex items-center justify-between border-b border-(--border) bg-(--accent) px-5 py-3">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-2 text-sm font-semibold text-[var(--foreground)]"
+          className="flex items-center gap-2 text-sm font-semibold text-(--foreground)"
         >
           {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
           Token Group #{index + 1}
@@ -83,7 +91,7 @@ export default function TokenGroup({
               {group.tokenSymbol || "ERC20"}
             </span>
           ) : null}
-          <span className="text-xs font-normal text-[var(--muted)]">
+          <span className="text-xs font-normal text-(--muted)">
             ({group.recipients.length} recipients)
           </span>
           {group.balance !== undefined && (
@@ -97,7 +105,7 @@ export default function TokenGroup({
           {totalGroups > 1 && (
             <button
               onClick={onRemove}
-              className="rounded-lg p-1.5 text-[var(--muted)] transition-colors hover:text-red-500 hover:bg-red-500/10"
+              className="rounded-lg p-1.5 text-(--muted) transition-colors hover:text-red-500 hover:bg-red-500/10"
               aria-label="Remove token group"
             >
               <Trash2 size={14} />
@@ -116,6 +124,7 @@ export default function TokenGroup({
             tokenSymbol={group.tokenSymbol}
             decimals={group.decimals}
             balance={group.balance}
+            chainId={chainId}
             onToggleNative={(isNative) => updateField("isNative", isNative)}
             onAddressChange={(addr) => updateField("tokenAddress", addr)}
             onInfoChange={updateTokenInfo}
@@ -139,23 +148,23 @@ export default function TokenGroup({
                 Import recipients from another token group
               </button>
               {showImport && (
-                <div className="mt-2 rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 space-y-2">
-                  {otherGroups.map((og, ogIdx) => (
-                    <div key={og.id} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-lg bg-[var(--accent)] p-3">
-                      <span className="text-sm text-[var(--foreground)]">
+                <div className="mt-2 rounded-xl border border-(--border) bg-(--background) p-3 space-y-2">
+                  {otherGroups.map((og) => (
+                    <div key={og.id} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-lg bg-(--accent) p-3">
+                      <span className="text-sm text-(--foreground)">
                         Group #{otherGroups.indexOf(og) + 1}{" "}
                         ({og.recipients.length} recipients)
                       </span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => importFromGroup(og, true)}
-                          className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50"
+                          className="rounded-lg border border-(--border) px-3 py-1.5 text-xs font-medium text-(--foreground) transition-all hover:border-blue-500/50"
                         >
                           With Amounts
                         </button>
                         <button
                           onClick={() => importFromGroup(og, false)}
-                          className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50"
+                          className="rounded-lg border border-(--border) px-3 py-1.5 text-xs font-medium text-(--foreground) transition-all hover:border-blue-500/50"
                         >
                           Addresses Only
                         </button>
@@ -172,11 +181,11 @@ export default function TokenGroup({
             recipients={group.recipients}
             onChange={(r) => updateField("recipients", r)}
             tokenSymbol={tokenSymbol}
+            chainId={chainId}
           />
 
           {/* Amount tools */}
           <AmountTools
-            recipients={group.recipients}
             decimals={group.decimals ?? (group.isNative ? 18 : 18)}
             onChange={(r) => updateField("recipients", r)}
           />

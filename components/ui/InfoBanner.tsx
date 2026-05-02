@@ -43,7 +43,7 @@ export default function InfoBanner({
   return (
     <div className={`flex gap-3 rounded-xl border ${border} ${bg} p-4`}>
       <Icon size={18} className={`mt-0.5 shrink-0 ${icon}`} />
-      <div className="text-sm leading-relaxed text-[var(--foreground)]">
+      <div className="text-sm leading-relaxed text-(--foreground)">
         {title && <p className="mb-1 font-semibold">{title}</p>}
         {children}
       </div>

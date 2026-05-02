@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   Shield,
   Lock,
-  Eye,
   RefreshCw,
   CheckCircle,
   Code,
@@ -19,14 +18,14 @@ import { GITHUB_URL } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Security",
   description:
-    "Learn how SandWitch keeps your funds and data safe — non-custodial design, exact approvals, local storage, and open-source code.",
+    "Learn how Sandwich keeps your funds and data safe — non-custodial design, exact approvals, local storage, and open-source code.",
 };
 
 const SECURITY_POINTS = [
   {
     icon: Shield,
     title: "Non-Custodial Design",
-    desc: "The SandWitch contract never holds your tokens. Every call forwards tokens directly from your wallet to recipients in the same transaction. There is no intermediary step where the contract controls your assets.",
+    desc: "The Sandwich contract never holds your tokens. Every call forwards tokens directly from your wallet to recipients in the same transaction. There is no intermediary step where the contract controls your assets.",
   },
   {
     icon: Lock,
@@ -41,7 +40,7 @@ const SECURITY_POINTS = [
   {
     icon: Globe,
     title: "Privacy via Custom RPCs",
-    desc: "Avoid tracking by public RPC providers. SandWitch allows you to use your own private RPC endpoints for all blockchain interactions, ensuring your IP and transaction metadata stay private.",
+    desc: "Avoid tracking by public RPC providers. Sandwich allows you to use your own private RPC endpoints for all blockchain interactions, ensuring your IP and transaction metadata stay private.",
   },
   {
     icon: Zap,
@@ -67,38 +66,38 @@ const SECURITY_POINTS = [
 
 export default function SecurityPage() {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           <span className="gradient-text">Security</span> Overview
         </h1>
-        <p className="mt-4 text-lg text-[var(--muted)]">
-          Security is the foundation of SandWitch. Here is how we protect your funds and privacy.
+        <p className="mt-4 text-lg text-(--muted)">
+          Security is the foundation of Sandwich. Here is how we protect your funds and privacy.
         </p>
       </div>
 
       {/* Key banner */}
       <div className="mt-8">
         <InfoBanner variant="security" title="Stateless & Transparent">
-          The SandWitch contract is a simple, stateless forwarder. It has no owner, no
+          The Sandwich contract is a simple, stateless forwarder. It has no owner, no
           admin functions, no upgradability, and no way to store or freeze your tokens.
           Everything happens on-chain in a single, verifiable step.
         </InfoBanner>
       </div>
 
       {/* Security points */}
-      <div className="mt-12 grid gap-6 sm:grid-cols-2">
+      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {SECURITY_POINTS.map((point) => (
           <div
             key={point.title}
-            className="flex flex-col gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 transition-all hover:border-blue-500/20"
+            className="flex flex-col gap-4 rounded-2xl border border-(--border) bg-(--card) p-6 transition-all hover:border-blue-500/20"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
               <point.icon size={24} />
             </div>
             <div>
               <h3 className="text-lg font-semibold">{point.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
+              <p className="mt-2 text-sm leading-relaxed text-(--muted)">
                 {point.desc}
               </p>
             </div>
@@ -118,33 +117,33 @@ export default function SecurityPage() {
 
           <InfoBanner variant="success" title="Manage your allowances">
             Use our built-in <strong>Approvals</strong> page to view all current permissions 
-            you've granted to SandWitch. You can revoke any allowance at any time with a single click.
+            you&apos;ve granted to Sandwich. You can revoke any allowance at any time with a single click.
           </InfoBanner>
 
           <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
             <h3 className="flex items-center gap-2 font-bold text-amber-500">
               <AlertTriangle size={18} /> Safety Checklist
             </h3>
-            <ul className="mt-4 list-disc pl-5 space-y-2 text-sm text-[var(--muted)]">
+            <ul className="mt-4 list-disc pl-5 space-y-2 text-sm text-(--muted)">
               <li>Always verify the contract address on the block explorer before approving.</li>
               <li>Double-check recipient addresses — blockchain transactions are irreversible.</li>
               <li>When importing data, only use files you exported yourself from this site.</li>
-              <li>SandWitch will never ask for your private key or seed phrase.</li>
+              <li>Sandwich will never ask for your private key or seed phrase.</li>
             </ul>
           </div>
         </div>
       </section>
 
       {/* Audit */}
-      <section className="mt-16 border-t border-[var(--border)] pt-16">
+      <section className="mt-16 border-t border-(--border) pt-16">
         <h2 className="text-2xl font-bold text-center">Audit & Transparency</h2>
         <div className="mt-8 flex flex-col items-center text-center max-w-2xl mx-auto">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-500 mb-6">
             <AlertTriangle size={32} />
           </div>
           <h3 className="text-xl font-bold">Pending Formal Audit</h3>
-          <p className="mt-4 text-[var(--muted)] leading-relaxed">
-            The SandWitch contracts use battle-tested OpenZeppelin libraries and follow 
+          <p className="mt-4 text-(--muted) leading-relaxed">
+            The Sandwich contracts use battle-tested OpenZeppelin libraries and follow 
             security best practices, but they have not yet undergone a formal third-party audit. 
             The code is fully open-source for public verification.
           </p>
@@ -153,7 +152,7 @@ export default function SecurityPage() {
               href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold transition-all hover:bg-[var(--accent)]"
+              className="inline-flex items-center gap-2 rounded-xl border border-(--border) px-6 py-3 text-sm font-bold transition-all hover:bg-(--accent)"
             >
               <Code size={18} /> Inspect Source Code
             </a>

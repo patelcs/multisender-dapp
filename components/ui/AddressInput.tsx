@@ -1,138 +1,158 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { BookUser, Star } from "lucide-react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { BookUser, Building2, Globe, User, Tag, Package, Filter, Database } from "lucide-react";
 import { useAddressBook } from "@/hooks/useAddressBook";
+import { useSettings } from "@/hooks/useSettings";
+import SearchModal from "./SearchModal";
+import FilterDropdown from "./FilterDropdown";
 
 interface AddressInputProps {
   value: string;
   onChange: (val: string) => void;
   placeholder: string;
   className?: string;
+  chainId?: number;
 }
 
-/** 
- * Reusable autocomplete dropdown for address book matches 
- * Used in MultiSend, Single Send, and Approval Manager.
- */
 export default function AddressInput({
   value,
   onChange,
   placeholder,
   className = "",
+  chainId,
 }: AddressInputProps) {
-  const { search, isAddressSaved, getLabel, add } = useAddressBook();
-  const [focused, setFocused] = useState(false);
-  const [showSave, setShowSave] = useState(false);
-  const [saveLabel, setSaveLabel] = useState("");
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const matches = focused ? search(value) : [];
-  const savedLabel = getLabel(value);
-  const canSave =
-    value.startsWith("0x") && value.length === 42 && !isAddressSaved(value);
-
-  // Close dropdown on outside click
+  const { settings, isLoaded } = useSettings();
+  const { entries, uniqueTags, getLabel } = useAddressBook(chainId);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tagFilter, setTagFilter] = useState<string>("All Tags");
+  const [sourceFilter, setSourceFilter] = useState<"all" | "popular" | "personal">("all");
+  
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setFocused(false);
-        setShowSave(false);
-      }
+    if (isLoaded) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSourceFilter(settings.defaultAddressSourceFilter);
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
+  }, [isLoaded, settings.defaultAddressSourceFilter]);
+  
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = () => {
-    if (!saveLabel.trim()) return;
-    add(saveLabel.trim(), value, "global");
-    setSaveLabel("");
-    setShowSave(false);
-  };
+  const savedEntry = useMemo(() => 
+    entries.find(e => e.address.toLowerCase() === value.toLowerCase()),
+    [entries, value]
+  );
+  
+  const savedLabel = savedEntry?.label || getLabel(value);
+
+  const filteredEntries = useMemo(() => {
+    return entries.filter(e => {
+      if (sourceFilter === "popular" && e.scope !== "default") return false;
+      if (sourceFilter === "personal" && e.scope === "default") return false;
+      if (tagFilter !== "All Tags" && !e.tags?.includes(tagFilter)) return false;
+      return true;
+    });
+  }, [entries, tagFilter, sourceFilter]);
+
+  const sourceLabel = {
+    all: "All Sources",
+    popular: "Popular",
+    personal: "Personal"
+  }[sourceFilter];
 
   return (
-    <div ref={wrapperRef} className={`relative w-full ${className}`}>
-      <div className="relative">
+    <div className={`relative w-full group ${className}`}>
+      <div className="relative flex items-center">
         <input
+          ref={inputRef}
           type="text"
-          placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setFocused(true)}
-          className="w-full rounded-xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] placeholder-[var(--muted)] transition-colors focus:border-blue-500/50 outline-none"
+          placeholder={placeholder}
+          className="w-full rounded-xl border border-(--border) bg-(--input-bg) pl-4 pr-12 py-2.5 text-sm outline-none transition-all focus:border-blue-500/50 hover:border-(--border-hover)"
         />
-        {/* Saved name label */}
-        {savedLabel && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md bg-blue-500/10 px-2 py-0.5 text-[10px] font-medium text-blue-500">
-            {savedLabel}
-          </span>
-        )}
-        {/* Save to address book button */}
-        {canSave && !savedLabel && !showSave && (
+        
+        <div className="absolute right-1.5 flex items-center gap-1">
+          {savedLabel && (
+            <span className="hidden sm:block rounded-md bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold text-blue-500 uppercase truncate max-w-[80px]">
+              {savedLabel}
+            </span>
+          )}
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              setShowSave(true);
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[var(--muted)] hover:text-blue-500 hover:bg-blue-500/10 transition-colors"
-            title="Save to address book"
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="rounded-lg p-1.5 text-(--muted) hover:bg-(--accent) hover:text-blue-500 transition-colors"
+            title="Open Address Book"
           >
-            <Star size={14} />
+            <BookUser size={18} />
           </button>
-        )}
+        </div>
       </div>
 
-      {/* Autocomplete dropdown */}
-      {focused && matches.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--border)] bg-[var(--card)] p-1 shadow-xl custom-scrollbar animate-in fade-in zoom-in-95 duration-100">
-          {matches.map((entry) => (
-            <button
-              key={entry.id}
-              onClick={() => {
-                onChange(entry.address);
-                setFocused(false);
-              }}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-[var(--accent)]"
-            >
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
-                <BookUser size={14} />
-              </div>
-              <div className="min-w-0">
+      {/* Selection Modal */}
+      <SearchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Select Address"
+        items={filteredEntries}
+        searchFields={(e) => [e.label, e.address, ...(e.tags || [])]}
+        onSelect={(e) => onChange(e.address)}
+        onCustomInput={onChange}
+        renderFilter={() => (
+          <div className="flex flex-wrap gap-2">
+            <FilterDropdown
+              label={sourceLabel}
+              value={sourceFilter}
+              options={[
+                { id: "all", label: "All Sources", icon: Globe },
+                { id: "popular", label: "Popular", icon: Package },
+                { id: "personal", label: "Personal", icon: User },
+              ]}
+              onChange={setSourceFilter}
+              icon={Database}
+              title="Filter by Source"
+            />
+            <FilterDropdown
+              label={tagFilter}
+              value={tagFilter}
+              options={[
+                { id: "All Tags", label: "All Tags", icon: Globe },
+                ...uniqueTags.map(tag => ({
+                  id: tag,
+                  label: tag,
+                  icon: Tag
+                }))
+              ]}
+              onChange={setTagFilter}
+              icon={Filter}
+              title="Filter by Tag"
+            />
+          </div>
+        )}
+        placeholder="Search name, address or tag..."
+        renderItem={(entry, onSelect) => (
+          <button
+            onClick={onSelect}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-(--accent)"
+          >
+            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+              entry.scope === "default" ? "bg-purple-500/10 text-purple-500" : "bg-blue-500/10 text-blue-500"
+            }`}>
+              {entry.scope === "default" ? <Building2 size={16} /> : <BookUser size={16} />}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
                 <div className="font-bold truncate">{entry.label}</div>
-                <div className="text-[10px] font-mono text-[var(--muted)] truncate">{entry.address}</div>
+                <div className="flex flex-wrap gap-1">
+                  {entry.tags?.map(t => (
+                    <span key={t} className="rounded px-1 bg-blue-500/10 text-blue-500 text-[8px] font-bold uppercase">{t}</span>
+                  ))}
+                </div>
               </div>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Inline save form */}
-      {showSave && (
-        <div className="absolute left-0 right-0 top-full z-30 mt-1 flex gap-2 rounded-xl border border-blue-500/20 bg-[var(--card)] p-2 shadow-xl animate-in fade-in zoom-in-95 duration-100">
-          <input
-            type="text"
-            placeholder="Name this address..."
-            value={saveLabel}
-            onChange={(e) => setSaveLabel(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSave()}
-            autoFocus
-            className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--input-bg)] px-3 py-2 text-xs outline-none focus:border-blue-500/30"
-          />
-          <button
-            onClick={handleSave}
-            className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700"
-          >
-            Save
+              <div className="text-[10px] font-mono text-(--muted) truncate">{entry.address}</div>
+            </div>
           </button>
-          <button
-            onClick={() => setShowSave(false)}
-            className="rounded-lg border border-[var(--border)] px-2 py-2 text-xs text-[var(--muted)]"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+        )}
+      />
     </div>
   );
 }

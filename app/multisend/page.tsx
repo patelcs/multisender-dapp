@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, Suspense } from "react";
 import { Plus, Send, AlertCircle, Wallet } from "lucide-react";
-import { useAccount, useChainId } from "wagmi";
+import { useConnection, useChainId } from "wagmi";
 import { parseUnits, isAddress } from "viem";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import TokenGroup, { type TokenGroupData } from "@/components/send/TokenGroup";
 import SendStepper from "@/components/send/SendStepper";
@@ -12,30 +13,47 @@ import InfoBanner from "@/components/ui/InfoBanner";
 import { MULTISENDER_ADDRESSES, NATIVE_CURRENCY } from "@/config/chains";
 import type { MultiSendGroup } from "@/hooks/useMultiSend";
 
-function createEmptyGroup(): TokenGroupData {
+function createEmptyGroup(nativeSymbol: string = "ETH"): TokenGroupData {
   return {
     id: crypto.randomUUID(),
     isNative: true,
     tokenAddress: "",
-    tokenSymbol: "ETH",
+    tokenSymbol: nativeSymbol,
     decimals: 18,
     recipients: [{ id: crypto.randomUUID(), address: "", amount: "" }],
   };
 }
 
-export default function MultiSendPage() {
-  const { isConnected } = useAccount();
+function MultiSendContent() {
+  const { isConnected } = useConnection();
   const chainId = useChainId();
+  const searchParams = useSearchParams();
   const contractAddress = MULTISENDER_ADDRESSES[chainId];
   const nativeCurrency = NATIVE_CURRENCY[chainId] ?? { symbol: "ETH", decimals: 18 };
 
-  const [groups, setGroups] = useState<TokenGroupData[]>([createEmptyGroup()]);
+  const [groups, setGroups] = useState<TokenGroupData[]>([createEmptyGroup(nativeCurrency.symbol)]);
   const [showStepper, setShowStepper] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
+  // Pre-fill from URL - only on initial load or if token param changes
+  const initialTokenRef = useState(searchParams.get("token"))[0];
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token && token === initialTokenRef) {
+      const isNative = token === "0x0000000000000000000000000000000000000000";
+      Promise.resolve().then(() => {
+        setGroups([{
+          ...createEmptyGroup(nativeCurrency.symbol),
+          isNative,
+          tokenAddress: isNative ? "" : token,
+        }]);
+      });
+    }
+  }, [initialTokenRef, nativeCurrency.symbol, searchParams]); // nativeCurrency.symbol is still needed if chain changes
+
   const addGroup = useCallback(() => {
-    setGroups((g) => [...g, createEmptyGroup()]);
-  }, []);
+    setGroups((g) => [...g, createEmptyGroup(nativeCurrency.symbol)]);
+  }, [nativeCurrency.symbol]);
 
   const removeGroup = useCallback((id: string) => {
     setGroups((g) => {
@@ -44,8 +62,12 @@ export default function MultiSendPage() {
     });
   }, []);
 
-  const updateGroup = useCallback((id: string, updated: Partial<TokenGroupData>) => {
-    setGroups((g) => g.map((grp) => (grp.id === id ? { ...grp, ...updated } : grp)));
+  const updateGroup = useCallback((id: string, updater: Partial<TokenGroupData> | ((prev: TokenGroupData) => Partial<TokenGroupData>)) => {
+    setGroups((g) => g.map((grp) => {
+      if (grp.id !== id) return grp;
+      const updated = typeof updater === 'function' ? updater(grp) : updater;
+      return { ...grp, ...updated };
+    }));
   }, []);
 
   // Validation
@@ -53,7 +75,7 @@ export default function MultiSendPage() {
     const errors: string[] = [];
 
     if (!contractAddress || contractAddress === "0x0000000000000000000000000000000000000000") {
-      errors.push("SandWitch contract is not deployed on this chain yet.");
+      errors.push("Sandwich contract is not deployed on this chain yet.");
     }
 
     groups.forEach((group, gi) => {
@@ -87,7 +109,7 @@ export default function MultiSendPage() {
   };
 
   // Build send data
-  const buildSendData = (): {
+  const buildSendData = useCallback((): {
     approvalSteps: { tokenAddress: `0x${string}`; tokenSymbol: string; requiredAmount: bigint }[];
     sendGroups: MultiSendGroup[];
   } => {
@@ -131,7 +153,7 @@ export default function MultiSendPage() {
     });
 
     return { approvalSteps, sendGroups };
-  };
+  }, [groups, nativeCurrency.decimals]);
 
   const handleReviewAndSend = () => {
     if (!validate()) {
@@ -141,31 +163,31 @@ export default function MultiSendPage() {
     setShowStepper(true);
   };
 
-  const { approvalSteps, sendGroups } = useMemo(() => buildSendData(), [groups, nativeCurrency.decimals]);
+  const { approvalSteps, sendGroups } = useMemo(() => buildSendData(), [buildSendData]);
 
   // Summary stats
   const totalRecipients = groups.reduce((s, g) => s + g.recipients.filter((r) => r.address.trim()).length, 0);
   const totalTokens = groups.length;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mb-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           <span className="gradient-text">Multi</span> Send
         </h1>
-        <p className="mt-2 text-[var(--muted)]">
+        <p className="mt-2 text-sm sm:text-base text-(--muted)">
           Add tokens, configure recipients, and send everything in one transaction.
         </p>
       </div>
 
       {!isConnected ? (
-        <div className="flex flex-col items-center gap-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-12 text-center">
+        <div className="flex flex-col items-center gap-6 rounded-2xl border border-(--border) bg-(--card) p-12 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-500">
             <Wallet size={32} />
           </div>
           <div>
             <h2 className="text-xl font-bold">Connect Your Wallet</h2>
-            <p className="mt-2 text-sm text-[var(--muted)]">
+            <p className="mt-2 text-sm text-(--muted)">
               Connect a wallet to start sending tokens to multiple addresses.
             </p>
           </div>
@@ -181,6 +203,7 @@ export default function MultiSendPage() {
               index={i}
               totalGroups={groups.length}
               otherGroups={groups.filter((g) => g.id !== group.id)}
+              chainId={chainId}
               onChange={(updated) => updateGroup(group.id, updated)}
               onRemove={() => removeGroup(group.id)}
             />
@@ -189,7 +212,7 @@ export default function MultiSendPage() {
           {/* Add token group */}
           <button
             onClick={addGroup}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--border)] py-4 text-sm font-medium text-[var(--muted)] transition-all hover:border-blue-500/50 hover:text-blue-500 hover:bg-blue-500/5"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-(--border) py-4 text-sm font-medium text-(--muted) transition-all hover:border-blue-500/50 hover:text-blue-500 hover:bg-blue-500/5"
           >
             <Plus size={18} />
             Add Another Token
@@ -213,15 +236,15 @@ export default function MultiSendPage() {
           )}
 
           {/* Summary + Send button */}
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <div className="rounded-2xl border border-(--border) bg-(--card) p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-6 text-sm text-[var(--muted)]">
+              <div className="flex gap-6 text-sm text-(--muted)">
                 <span>
-                  <strong className="text-[var(--foreground)]">{totalTokens}</strong> token
+                  <strong className="text-(--foreground)">{totalTokens}</strong> token
                   {totalTokens !== 1 ? "s" : ""}
                 </span>
                 <span>
-                  <strong className="text-[var(--foreground)]">{totalRecipients}</strong> recipient
+                  <strong className="text-(--foreground)">{totalRecipients}</strong> recipient
                   {totalRecipients !== 1 ? "s" : ""}
                 </span>
               </div>
@@ -237,7 +260,7 @@ export default function MultiSendPage() {
 
           {/* Security info */}
           <InfoBanner variant="security" title="Your funds are safe">
-            The SandWitch contract is non-custodial — it forwards tokens directly to recipients
+            The Sandwich contract is non-custodial — it forwards tokens directly to recipients
             in the same transaction. It never stores, holds, or locks your tokens. ERC20 approvals
             are requested for the exact required amount only.
           </InfoBanner>
@@ -256,5 +279,17 @@ export default function MultiSendPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function MultiSendPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-[50vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    }>
+      <MultiSendContent />
+    </Suspense>
   );
 }

@@ -19,6 +19,8 @@ export interface AddressBookEntry {
   address: string;
   scope: "global" | "user";
   ownerAddress?: string;
+  chainId?: number; // If undefined, applies to all chains
+  tags: string[];
   createdAt: number;
 }
 
@@ -40,21 +42,29 @@ export interface CustomRPC {
   updatedAt: number;
 }
 
+export interface AppSettings {
+  portfolioShowZeroBalances: boolean;
+  defaultTokenSourceFilter: "all" | "popular" | "personal";
+  defaultAddressSourceFilter: "all" | "popular" | "personal";
+}
+
 export interface ExportData {
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   exportedAt: number;
   addressBook?: AddressBookEntry[];
   tokenList?: SavedToken[];
   rpcConfig?: CustomRPC[];
+  settings?: AppSettings;
 }
 
 // ─── DB Config ──────────────────────────────────────────────────
 
-const DB_NAME = "SandWitchDB";
+const DB_NAME = "SandwichDB";
 const DB_VERSION = 2; // Bumped to 2 for RPC config
 const ADDR_STORE = "address_book";
 const TOKEN_STORE = "token_list";
 const RPC_STORE = "rpc_config";
+const SETTINGS_KEY = "sandwich_settings";
 
 function getDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -63,9 +73,8 @@ function getDB(): Promise<IDBDatabase> {
     }
     const req = indexedDB.open(DB_NAME, DB_VERSION);
 
-    req.onupgradeneeded = (event) => {
+    req.onupgradeneeded = () => {
       const db = req.result;
-      const oldVersion = event.oldVersion;
 
       if (!db.objectStoreNames.contains(ADDR_STORE)) {
         db.createObjectStore(ADDR_STORE, { keyPath: "id" });
@@ -155,9 +164,11 @@ export async function getAllAddressBook(): Promise<AddressBookEntry[]> {
   return readAll<AddressBookEntry>(ADDR_STORE);
 }
 
-export async function getAddressBook(userAddress?: string): Promise<AddressBookEntry[]> {
+export async function getAddressBook(userAddress?: string, chainId?: number): Promise<AddressBookEntry[]> {
   const all = await getAllAddressBook();
-  return filterByScope(all, userAddress);
+  return filterByScope(all, userAddress).filter(
+    (e) => e.chainId === undefined || e.chainId === chainId
+  );
 }
 
 export async function addAddressBookEntry(
@@ -167,6 +178,7 @@ export async function addAddressBookEntry(
     ...entry,
     id: crypto.randomUUID(),
     createdAt: Date.now(),
+    tags: entry.tags || [],
   };
   await writeItem(ADDR_STORE, newEntry);
   return newEntry;
@@ -174,7 +186,7 @@ export async function addAddressBookEntry(
 
 export async function updateAddressBookEntry(
   id: string,
-  updates: Partial<Pick<AddressBookEntry, "label" | "address" | "scope">>
+  updates: Partial<Pick<AddressBookEntry, "label" | "address" | "scope" | "tags" | "chainId">>
 ): Promise<void> {
   const all = await getAllAddressBook();
   const existing = all.find((e) => e.id === id);
@@ -246,12 +258,21 @@ export async function removeCustomRPC(chainId: number): Promise<void> {
  * Includes global data and user-specific data across all wallets.
  */
 export async function exportUserData(): Promise<ExportData> {
+  let settings: AppSettings | undefined;
+  try {
+    const stored = localStorage.getItem(SETTINGS_KEY);
+    if (stored) settings = JSON.parse(stored);
+  } catch (e) {
+    console.error("Failed to export settings", e);
+  }
+
   return {
-    version: 2,
+    version: 3,
     exportedAt: Date.now(),
     addressBook: await getAllAddressBook(),
     tokenList: await getAllTokenList(),
     rpcConfig: await getCustomRPCs(),
+    settings,
   };
 }
 
@@ -264,10 +285,12 @@ export async function importUserData(data: ExportData): Promise<{
   addressBookAdded: number;
   tokensAdded: number;
   rpcsAdded: number;
+  settingsImported: boolean;
 }> {
   let addressBookAdded = 0;
   let tokensAdded = 0;
   let rpcsAdded = 0;
+  let settingsImported = false;
 
   // Address book
   const existingAddrs = await getAllAddressBook();
@@ -300,7 +323,17 @@ export async function importUserData(data: ExportData): Promise<{
     rpcsAdded++;
   }
 
-  return { addressBookAdded, tokensAdded, rpcsAdded };
+  // Settings
+  if (data.settings) {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+      settingsImported = true;
+    } catch (e) {
+      console.error("Failed to import settings", e);
+    }
+  }
+
+  return { addressBookAdded, tokensAdded, rpcsAdded, settingsImported };
 }
 
 /**
@@ -309,8 +342,8 @@ export async function importUserData(data: ExportData): Promise<{
 export function validateImportData(data: unknown): data is ExportData {
   if (!data || typeof data !== "object") return false;
   const d = data as Record<string, unknown>;
-  if (d.version !== 1 && d.version !== 2) return false;
-  if (!Array.isArray(d.addressBook) && !Array.isArray(d.tokenList)) return false;
+  if (d.version !== 1 && d.version !== 2 && d.version !== 3) return false;
+  if (!Array.isArray(d.addressBook) && !Array.isArray(d.tokenList) && !d.settings) return false;
   return true;
 }
 

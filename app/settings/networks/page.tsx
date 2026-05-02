@@ -5,32 +5,58 @@ import {
   Network, 
   Save, 
   RotateCcw, 
-  Globe, 
-  Check, 
   AlertCircle,
-  ExternalLink
+  Loader2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRPCConfig } from "@/hooks/useRPCConfig";
 import { SUPPORTED_CHAINS } from "@/config/chains";
+import { createPublicClient, http } from "viem";
 
 export default function NetworksPage() {
-  const { rpcs, isLoading, update } = useRPCConfig();
+  const { rpcs, update } = useRPCConfig();
   const [editingChainId, setEditingId] = useState<number | null>(null);
   const [editUrl, setEditUrl] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
 
   const handleSave = async (chainId: number) => {
     if (editUrl && !editUrl.startsWith("http") && !editUrl.startsWith("ws")) {
       toast.error("Invalid RPC URL. Must start with http://, https://, or ws://");
       return;
     }
+
+    if (!editUrl) {
+      handleReset(chainId);
+      return;
+    }
+
+    setIsValidating(true);
+    const loadingToast = toast.loading("Validating RPC...");
     
     try {
+      // Validate Chain ID
+      const client = createPublicClient({
+        transport: http(editUrl),
+      });
+      
+      const remoteChainId = await client.getChainId();
+      
+      if (remoteChainId !== chainId) {
+        toast.dismiss(loadingToast);
+        toast.error(`Chain ID mismatch! RPC is for chain ${remoteChainId}, but you are configuring chain ${chainId}.`);
+        setIsValidating(false);
+        return;
+      }
+
       await update(chainId, editUrl);
       setEditingId(null);
-      toast.success("RPC updated. Refresh the page for changes to take effect.");
-    } catch (err) {
-      toast.error("Failed to save RPC");
+      toast.dismiss(loadingToast);
+      toast.success("RPC verified and saved. Refresh for changes to take effect.");
+    } catch {
+      toast.dismiss(loadingToast);
+      toast.error("Could not connect to RPC. Please check the URL.");
+    } finally {
+      setIsValidating(false);
     }
   };
 
@@ -38,7 +64,7 @@ export default function NetworksPage() {
     try {
       await update(chainId, "");
       toast.success("RPC reset to default");
-    } catch (err) {
+    } catch {
       toast.error("Failed to reset RPC");
     }
   };
@@ -52,7 +78,7 @@ export default function NetworksPage() {
         </h2>
       </div>
       
-      <p className="text-sm text-[var(--muted)]">
+      <p className="text-sm text-(--muted)">
         Override the default public RPC endpoints with your own private nodes for better reliability and privacy. 
         Changes require a page refresh to take effect.
       </p>
@@ -63,7 +89,7 @@ export default function NetworksPage() {
           const isEditing = editingChainId === chain.id;
           
           return (
-            <div key={chain.id} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-all hover:border-blue-500/30">
+            <div key={chain.id} className="rounded-2xl border border-(--border) bg-(--card) p-5 transition-all hover:border-blue-500/30">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 font-bold">
@@ -82,7 +108,7 @@ export default function NetworksPage() {
                         </span>
                       )}
                     </div>
-                    <div className="text-[10px] font-mono text-[var(--muted)]">Chain ID: {chain.id}</div>
+                    <div className="text-[10px] font-mono text-(--muted)">Chain ID: {chain.id}</div>
                   </div>
                 </div>
 
@@ -94,7 +120,7 @@ export default function NetworksPage() {
                           setEditingId(chain.id);
                           setEditUrl(customRpc?.url || "");
                         }}
-                        className="rounded-xl border border-[var(--border)] px-4 py-2 text-xs font-bold text-[var(--foreground)] hover:bg-[var(--accent)]"
+                        className="rounded-xl border border-(--border) px-4 py-2 text-xs font-bold text-(--foreground) hover:bg-(--accent)"
                       >
                         {customRpc ? "Change RPC" : "Configure"}
                       </button>
@@ -112,15 +138,16 @@ export default function NetworksPage() {
                     <div className="flex gap-2 w-full sm:w-auto">
                       <button
                         onClick={() => setEditingId(null)}
-                        className="px-3 py-2 text-xs font-bold text-[var(--muted)] hover:text-[var(--foreground)]"
+                        className="px-3 py-2 text-xs font-bold text-(--muted) hover:text-(--foreground)"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={() => handleSave(chain.id)}
-                        className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700"
+                        disabled={isValidating}
+                        className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Save size={14} /> Save
+                        {isValidating ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} Save
                       </button>
                     </div>
                   )}
@@ -130,7 +157,7 @@ export default function NetworksPage() {
               {isEditing ? (
                 <div className="mt-4 animate-in fade-in slide-in-from-top-1 duration-200">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] pl-1">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-(--muted) pl-1">
                       Custom RPC URL
                     </label>
                     <input
@@ -138,18 +165,18 @@ export default function NetworksPage() {
                       placeholder="https://your-node-url.com"
                       value={editUrl}
                       onChange={(e) => setEditUrl(e.target.value)}
-                      className="w-full rounded-xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3 text-sm font-mono focus:border-blue-500/50"
+                      className="w-full rounded-xl border border-(--border) bg-(--input-bg) px-4 py-3 text-sm font-mono focus:border-blue-500/50"
                       autoFocus
                     />
                   </div>
                 </div>
               ) : (
-                <div className="mt-4 rounded-xl bg-[var(--accent)] px-4 py-3">
+                <div className="mt-4 rounded-xl bg-(--accent) px-4 py-3">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] opacity-70">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-(--muted) opacity-70">
                       Currently using:
                     </span>
-                    <span className="truncate font-mono text-xs text-[var(--foreground)] opacity-80">
+                    <span className="truncate font-mono text-xs text-(--foreground) opacity-80">
                       {customRpc?.url || "Public Shared RPC (Default)"}
                     </span>
                   </div>
@@ -166,7 +193,7 @@ export default function NetworksPage() {
           <p className="font-bold">Security Note:</p>
           <p>
             Always use trusted RPC providers. A malicious RPC could misreport balances or simulate 
-            transactions incorrectly. SandWitch never shares your private keys with any RPC.
+            transactions incorrectly. Sandwich never shares your private keys with any RPC.
           </p>
         </div>
       </div>

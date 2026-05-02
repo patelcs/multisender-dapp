@@ -82,7 +82,7 @@ export default function GettingStartedPage() {
               <span className="gradient-text">multiple wallets</span> in one
               click
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--muted)] sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-(--muted) sm:text-xl">
               Send ERC20 tokens and native ETH to hundreds of addresses
               with a single, gas-efficient transaction. Non-custodial, open-source, and
               multi-chain.
@@ -97,7 +97,7 @@ export default function GettingStartedPage() {
               </Link>
               <Link
                 href="/guide"
-                className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-8 py-3.5 text-base font-semibold text-[var(--foreground)] transition-all hover:bg-[var(--accent)]"
+                className="inline-flex items-center gap-2 rounded-xl border border-(--border) px-8 py-3.5 text-base font-semibold text-(--foreground) transition-all hover:bg-(--accent)"
               >
                 View Guide
               </Link>
@@ -107,13 +107,13 @@ export default function GettingStartedPage() {
       </section>
 
       {/* Features */}
-      <section className="border-t border-[var(--border)] bg-[var(--card)]">
+      <section className="border-t border-(--border) bg-(--card)">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Why use <span className="gradient-text">SandWitch</span>?
+              Why use <span className="gradient-text">Sandwich</span>?
             </h2>
-            <p className="mt-4 text-[var(--muted)]">
+            <p className="mt-4 text-(--muted)">
               Everything you need to send tokens efficiently and securely.
             </p>
           </div>
@@ -121,13 +121,13 @@ export default function GettingStartedPage() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="group rounded-2xl border border-[var(--border)] bg-[var(--background)] p-6 transition-all hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5"
+                className="group rounded-2xl border border-(--border) bg-(--background) p-6 transition-all hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5"
               >
                 <div className="mb-4 inline-flex rounded-xl bg-blue-500/10 p-3 text-blue-500 transition-colors group-hover:bg-blue-500/20">
                   <f.icon size={24} />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">{f.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--muted)]">
+                <p className="text-sm leading-relaxed text-(--muted)">
                   {f.desc}
                 </p>
               </div>
@@ -137,13 +137,13 @@ export default function GettingStartedPage() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-[var(--border)]">
+      <section className="border-t border-(--border)">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               How it works
             </h2>
-            <p className="mt-4 text-[var(--muted)]">
+            <p className="mt-4 text-(--muted)">
               Three simple steps to send tokens.
             </p>
           </div>
@@ -154,7 +154,7 @@ export default function GettingStartedPage() {
                   {s.step}
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">{s.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--muted)]">
+                <p className="text-sm leading-relaxed text-(--muted)">
                   {s.desc}
                 </p>
               </div>
@@ -164,13 +164,13 @@ export default function GettingStartedPage() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-[var(--border)] bg-[var(--card)]">
+      <section className="border-t border-(--border) bg-(--card)">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Ready to send?
             </h2>
-            <p className="mt-4 text-[var(--muted)]">
+            <p className="mt-4 text-(--muted)">
               Connect your wallet and start sending tokens in seconds.
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -183,7 +183,7 @@ export default function GettingStartedPage() {
               </Link>
               <Link
                 href="/security"
-                className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] px-8 py-3.5 text-base font-semibold text-[var(--foreground)] transition-all hover:bg-[var(--accent)]"
+                className="inline-flex items-center gap-2 rounded-xl border border-(--border) px-8 py-3.5 text-base font-semibold text-(--foreground) transition-all hover:bg-(--accent)"
               >
                 <Shield size={18} />
                 Learn About Security

@@ -16,6 +16,12 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 
   const navItems = [
     {
+      label: "General",
+      href: "/settings/general",
+      icon: Settings,
+      color: "text-amber-500",
+    },
+    {
       label: "Address Book",
       href: "/settings/address-book",
       icon: BookUser,
@@ -42,13 +48,13 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   ];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
           <Settings size={28} className="text-blue-500" />
           <span className="gradient-text">Settings</span>
         </h1>
-        <p className="mt-2 text-[var(--muted)]">
+        <p className="mt-2 text-(--muted)">
           Manage your address book, saved tokens, and data.
         </p>
       </div>
@@ -72,8 +78,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 href={item.href}
                 className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all border ${
                   isActive
-                    ? `bg-[var(--accent)] ${item.color} border-[var(--border)] shadow-sm`
-                    : "text-[var(--muted)] hover:bg-[var(--accent)] hover:text-[var(--foreground)] border-transparent"
+                    ? `bg-(--accent) ${item.color} border-(--border) shadow-sm`
+                    : "text-(--muted) hover:bg-(--accent) hover:text-(--foreground) border-transparent"
                 }`}
               >
                 <Icon size={18} />
@@ -84,7 +90,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         </div>
 
         {/* Content area */}
-        <div className="flex-1 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm min-h-[400px]">
+        <div className="flex-1 rounded-2xl border border-(--border) bg-(--card) p-6 shadow-sm min-h-[400px]">
           {children}
         </div>
       </div>

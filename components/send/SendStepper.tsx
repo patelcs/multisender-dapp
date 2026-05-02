@@ -83,7 +83,7 @@ function ApprovalStepCard({
           ? "border-green-500/30 bg-green-500/5"
           : isActive
           ? "border-blue-500/30 bg-blue-500/5"
-          : "border-[var(--border)] bg-[var(--card)] opacity-50"
+          : "border-(--border) bg-(--card) opacity-50"
       }`}
     >
       <div className="flex items-center gap-3">
@@ -92,13 +92,13 @@ function ApprovalStepCard({
         ) : isApproving ? (
           <Loader2 size={20} className="shrink-0 animate-spin text-blue-500" />
         ) : (
-          <Circle size={20} className="shrink-0 text-[var(--muted)]" />
+          <Circle size={20} className="shrink-0 text-(--muted)" />
         )}
         <div className="flex-1">
           <p className="text-sm font-medium">
             Approve {step.tokenSymbol}
           </p>
-          <p className="text-xs text-[var(--muted)]">
+          <p className="text-xs text-(--muted)">
             {isDone
               ? "Approval confirmed ✓"
               : isApproving
@@ -117,16 +117,16 @@ function ApprovalStepCard({
       </div>
 
       {isActive && !isDone && !isApproving && (
-        <div className="mt-4 flex flex-col gap-3 border-t border-[var(--border)] pt-4">
+        <div className="mt-4 flex flex-col gap-3 border-t border-(--border) pt-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[var(--muted)]">Approval Type:</span>
-            <div className="flex gap-1 rounded-lg bg-[var(--accent)] p-1">
+            <span className="text-xs font-medium text-(--muted)">Approval Type:</span>
+            <div className="flex gap-1 rounded-lg bg-(--accent) p-1">
               <button
                 onClick={() => setApprovalType("exact")}
                 className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
                   approvalType === "exact"
                     ? "bg-blue-500 text-white shadow-sm"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    : "text-(--muted) hover:text-(--foreground)"
                 }`}
               >
                 Exact Amount
@@ -136,7 +136,7 @@ function ApprovalStepCard({
                 className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
                   approvalType === "max"
                     ? "bg-purple-600 text-white shadow-sm"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    : "text-(--muted) hover:text-(--foreground)"
                 }`}
               >
                 Infinite (Max)
@@ -144,7 +144,7 @@ function ApprovalStepCard({
             </div>
           </div>
           
-          <p className="text-[10px] leading-relaxed text-[var(--muted)]">
+          <p className="text-[10px] leading-relaxed text-(--muted)">
             {approvalType === "exact" 
               ? "Approves only the amount required for this transaction. More secure but requires a new approval next time."
               : "Approves a very large amount. You won't have to approve this token again for future transactions, saving gas and time."}
@@ -162,7 +162,7 @@ function ApprovalStepCard({
       {isActive && !isDone && (
         <div className="mt-3">
           <InfoBanner variant="security">
-            The SandWitch contract is <strong>non-custodial</strong>. 
+            The Sandwich contract is <strong>non-custodial</strong>. 
             {approvalType === "exact" 
               ? " You are approving only the minimum required amount." 
               : " Approving 'Max' is safe as the contract can only transfer tokens when you explicitly call the send function."}
@@ -205,20 +205,20 @@ export default function SendStepper({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-(--border) bg-(--card) shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-(--border) px-6 py-4">
           <div>
-            <h3 className="text-lg font-bold text-[var(--foreground)]">
+            <h3 className="text-lg font-bold text-(--foreground)">
               Review & Send
             </h3>
-            <p className="text-xs text-[var(--muted)]">
+            <p className="text-xs text-(--muted)">
               Step {Math.min(currentStep + 1, totalSteps)} of {totalSteps}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-[var(--muted)] transition-colors hover:text-[var(--foreground)] hover:bg-[var(--accent)]"
+            className="rounded-lg p-2 text-(--muted) transition-colors hover:text-(--foreground) hover:bg-(--accent)"
           >
             <X size={18} />
           </button>
@@ -243,7 +243,7 @@ export default function SendStepper({
                 ? "border-green-500/30 bg-green-500/5"
                 : approvalsComplete || approvalSteps.length === 0
                 ? "border-blue-500/30 bg-blue-500/5"
-                : "border-[var(--border)] bg-[var(--card)] opacity-50"
+                : "border-(--border) bg-(--card) opacity-50"
             }`}
           >
             <div className="flex items-center gap-3">
@@ -252,11 +252,11 @@ export default function SendStepper({
               ) : isSending ? (
                 <Loader2 size={20} className="shrink-0 animate-spin text-blue-500" />
               ) : (
-                <Circle size={20} className="shrink-0 text-[var(--muted)]" />
+                <Circle size={20} className="shrink-0 text-(--muted)" />
               )}
               <div className="flex-1">
                 <p className="text-sm font-medium">Execute Multi-Send</p>
-                <p className="text-xs text-[var(--muted)]">
+                <p className="text-xs text-(--muted)">
                   {isConfirmed
                     ? "Transaction confirmed! ✓"
                     : isSending
@@ -300,7 +300,7 @@ export default function SendStepper({
             {(approvalsComplete || approvalSteps.length === 0) && !isConfirmed && (
               <div className="mt-3">
                 <InfoBanner variant="info">
-                  The SandWitch contract is <strong>non-custodial</strong> — it forwards tokens
+                  The Sandwich contract is <strong>non-custodial</strong> — it forwards tokens
                   directly to recipients and cannot store your funds. Any excess ETH is automatically refunded.
                 </InfoBanner>
               </div>
@@ -310,7 +310,7 @@ export default function SendStepper({
 
         {/* Success banner */}
         {isConfirmed && (
-          <div className="border-t border-[var(--border)] px-6 py-4">
+          <div className="border-t border-(--border) px-6 py-4">
             <div className="rounded-xl bg-green-500/10 p-4 text-center">
               <p className="text-sm font-semibold text-green-500">
                 🎉 All tokens sent successfully!

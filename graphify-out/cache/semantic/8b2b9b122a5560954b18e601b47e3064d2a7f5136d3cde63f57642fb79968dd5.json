@@ -1,1 +1,0 @@
-{"nodes": [{"id": "abi_multisender_abi", "label": "MultiSender Contract ABI", "file_type": "code", "source_file": "config/abi.ts"}, {"id": "abi_erc20_abi", "label": "ERC20 ABI", "file_type": "code", "source_file": "config/abi.ts"}], "edges": [], "hyperedges": []}

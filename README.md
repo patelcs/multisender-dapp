@@ -1,4 +1,4 @@
-# SandWitch 🥪
+# Sandwich 🥪
 
 A modern, multi-chain utility platform for Ethereum and EVM-compatible networks.
 
@@ -37,7 +37,7 @@ A modern, multi-chain utility platform for Ethereum and EVM-compatible networks.
 
 ## Privacy & Security
 
-SandWitch is designed with privacy as a core principle:
+Sandwich is designed with privacy as a core principle:
 - **Zero Server Side**: No databases, no tracking, no analytics.
 - **Non-Custodial**: The multi-sender contract never holds or controls your funds; it simply forwards them.
 - **Exact Approvals**: Token approvals are only requested for the exact amount needed for the transaction.

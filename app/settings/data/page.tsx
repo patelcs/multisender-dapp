@@ -8,10 +8,10 @@ import {
   AlertTriangle,
   Trash2,
 } from "lucide-react";
-import { useAccount } from "wagmi";
 import toast from "react-hot-toast";
 import { useAddressBook } from "@/hooks/useAddressBook";
 import { useTokenList } from "@/hooks/useTokenList";
+import { useSettings } from "@/hooks/useSettings";
 import {
   exportUserData,
   importUserData,
@@ -25,6 +25,7 @@ import {
 function ImportExportSection() {
   const { refresh: refreshAddr } = useAddressBook();
   const { refresh: refreshTokens } = useTokenList();
+  const { refresh: refreshSettings } = useSettings();
   const fileRef = useRef<HTMLInputElement>(null);
   const [importPreview, setImportPreview] = useState<ExportData | null>(null);
 
@@ -34,7 +35,7 @@ function ImportExportSection() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `sandwitch-data-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `sandwich-data-${new Date().toISOString().slice(0, 10)}.json`;
     document.body.appendChild(a);
     URL.revokeObjectURL(url);
     toast.success("Data exported");
@@ -65,11 +66,12 @@ function ImportExportSection() {
     if (!importPreview) return;
     const result = await importUserData(importPreview);
     toast.success(
-      `Imported ${result.addressBookAdded} contacts, ${result.tokensAdded} tokens`
+      `Imported ${result.addressBookAdded} contacts, ${result.tokensAdded} tokens${result.settingsImported ? ", and general settings" : ""}`
     );
     setImportPreview(null);
     refreshAddr();
     refreshTokens();
+    if (result.settingsImported) refreshSettings();
   };
 
   return (
@@ -78,21 +80,21 @@ function ImportExportSection() {
         <FileJson size={20} className="text-green-500" />
         Import &amp; Export
       </h2>
-      <p className="mt-1 text-sm text-[var(--muted)]">
+      <p className="mt-1 text-sm text-(--muted)">
         Export all your data (including global and all wallet-specific entries) as JSON, or import from a file.
       </p>
 
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <button
           onClick={handleExport}
-          className="flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 py-3 text-sm font-medium text-[var(--foreground)] transition-all hover:border-green-500/50 hover:bg-green-500/5"
+          className="flex items-center justify-center gap-2 rounded-xl border border-(--border) bg-(--card) px-6 py-3 text-sm font-medium text-(--foreground) transition-all hover:border-green-500/50 hover:bg-green-500/5"
         >
           <Download size={16} className="text-green-500" />
           Export JSON
         </button>
         <button
           onClick={() => fileRef.current?.click()}
-          className="flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 py-3 text-sm font-medium text-[var(--foreground)] transition-all hover:border-blue-500/50 hover:bg-blue-500/5"
+          className="flex items-center justify-center gap-2 rounded-xl border border-(--border) bg-(--card) px-6 py-3 text-sm font-medium text-(--foreground) transition-all hover:border-blue-500/50 hover:bg-blue-500/5"
         >
           <Upload size={16} className="text-blue-500" />
           Import JSON
@@ -112,16 +114,26 @@ function ImportExportSection() {
           <p className="text-sm font-medium">
             Ready to import:
           </p>
-          <div className="flex gap-4 text-sm text-[var(--muted)]">
+          <div className="flex flex-wrap gap-4 text-sm text-(--muted)">
             <span>
-              <strong className="text-[var(--foreground)]">{importPreview.addressBook?.length ?? 0}</strong> contacts
+              <strong className="text-(--foreground)">{importPreview.addressBook?.length ?? 0}</strong> contacts
             </span>
             <span>
-              <strong className="text-[var(--foreground)]">{importPreview.tokenList?.length ?? 0}</strong> tokens
+              <strong className="text-(--foreground)">{importPreview.tokenList?.length ?? 0}</strong> tokens
             </span>
+            {importPreview.rpcConfig && importPreview.rpcConfig.length > 0 && (
+              <span>
+                <strong className="text-(--foreground)">{importPreview.rpcConfig.length}</strong> RPCs
+              </span>
+            )}
+            {importPreview.settings && (
+              <span className="flex items-center gap-1 text-blue-500 font-bold">
+                ✓ Includes Settings
+              </span>
+            )}
           </div>
-          <p className="text-xs text-[var(--muted)]">
-            Duplicate entries (same address) will be skipped.
+          <p className="text-xs text-(--muted)">
+            Duplicate entries (same address) will be skipped. Settings will be overwritten.
           </p>
           <div className="flex gap-2">
             <button
@@ -132,7 +144,7 @@ function ImportExportSection() {
             </button>
             <button
               onClick={() => setImportPreview(null)}
-              className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--muted)]"
+              className="rounded-lg border border-(--border) px-4 py-2 text-sm font-medium text-(--muted)"
             >
               Cancel
             </button>
@@ -164,7 +176,7 @@ function DangerZone() {
         <AlertTriangle size={20} />
         Danger Zone
       </h2>
-      <p className="mt-1 text-sm text-[var(--muted)]">
+      <p className="mt-1 text-sm text-(--muted)">
         Permanently delete all locally stored data (address book + tokens).
       </p>
 
@@ -190,7 +202,7 @@ function DangerZone() {
             </button>
             <button
               onClick={() => setShowConfirm(false)}
-              className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--muted)]"
+              className="rounded-lg border border-(--border) px-4 py-2 text-sm font-medium text-(--muted)"
             >
               Cancel
             </button>
@@ -205,7 +217,7 @@ export default function DataManagementPage() {
   return (
     <div className="space-y-10">
       <ImportExportSection />
-      <hr className="border-[var(--border)]" />
+      <hr className="border-(--border)" />
       <DangerZone />
     </div>
   );

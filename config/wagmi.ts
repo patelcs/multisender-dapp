@@ -2,7 +2,7 @@
 
 import { http, createConfig, fallback, type Transport } from "wagmi";
 import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
-import { mainnet, sepolia } from "wagmi/chains";
+import { worldchain, worldchainSepolia } from "wagmi/chains";
 import { SUPPORTED_CHAINS } from "./chains";
 import { getCustomRPCs, type CustomRPC } from "@/lib/storage";
 
@@ -14,8 +14,8 @@ const WALLETCONNECT_PROJECT_ID = "667f139192de6e24b5087e13bf1e71e0";
 
 // Default public RPCs as fallback
 const DEFAULT_RPCS: Record<number, string[]> = {
-  [mainnet.id]: ["https://eth.drpc.org", "https://cloudflare-eth.com"],
-  [sepolia.id]: ["https://sepolia.drpc.org", "https://eth-sepolia.public.blastapi.io"],
+  [worldchain.id]: ["https://worldchain-mainnet.g.alchemy.com/public"],
+  [worldchainSepolia.id]: ["https://worldchain-sepolia.g.alchemy.com/public"],
 };
 
 /**

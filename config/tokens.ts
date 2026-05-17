@@ -1,4 +1,4 @@
-import { mainnet, sepolia } from "wagmi/chains";
+import { worldchain, worldchainSepolia } from "wagmi/chains";
 
 /**
  * ============================================
@@ -25,47 +25,47 @@ export interface DefaultToken {
 }
 
 export const DEFAULT_TOKENS: Record<number, DefaultToken[]> = {
-  // ─── Ethereum Mainnet ───────────────────────────────────────
-  [mainnet.id]: [
+  // ─── worldchain mainnet ───────────────────────────────────────
+  [worldchain.id]: [
     {
-      address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-      name: "Tether USD",
-      symbol: "USDT",
-      decimals: 6,
+      address: "0x2cFc85d8E48F8EAB294be644d9E25C3030863003",
+      name: "Worldcoin",
+      symbol: "WLD",
+      decimals: 18,
     },
     {
-      address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      name: "USD Coin",
+      address: "0x79A02482A880bCE3F13e09Da970dC34db4CD24d1",
+      name: "USDC",
       symbol: "USDC",
       decimals: 6,
     },
     {
-      address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      name: "Dai Stablecoin",
-      symbol: "DAI",
-      decimals: 18,
-    },
-    {
-      address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-      name: "Wrapped Ether",
-      symbol: "WETH",
-      decimals: 18,
-    },
-    {
-      address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      address: "0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3",
       name: "Wrapped BTC",
       symbol: "WBTC",
       decimals: 8,
     },
+    {
+      address: "0x4200000000000000000000000000000000000006",
+      name: "Wrapped Ether ",
+      symbol: "WETH",
+      decimals: 18,
+    },
+    {
+      address: "0x859DBE24b90C9f2f7742083d3cf59cA41f55Be5d",
+      name: "Savings Dai",
+      symbol: "sDAI ",
+      decimals: 18,
+    },
   ],
 
-  // ─── Sepolia Testnet ────────────────────────────────────────
-  [sepolia.id]: [
+  // ─── worldchainSepolia Testnet ────────────────────────────────────────
+  [worldchainSepolia.id]: [
     {
-      address: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
-      name: "Circle USDC",
-      symbol: "USDC",
-      decimals: 6,
+      address: "0x4200000000000000000000000000000000000006",
+      name: "Wrapped Ether ",
+      symbol: "WETH",
+      decimals: 18,
     },
   ],
 };

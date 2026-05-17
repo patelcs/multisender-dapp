@@ -113,13 +113,13 @@ export default function RecipientList({
         <h4 className="text-sm font-semibold text-(--muted)">
           Recipients ({recipients.length})
         </h4>
-        <button
+        {/* <button
           onClick={() => setShowBulk(!showBulk)}
           className="flex items-center gap-1.5 text-xs font-medium text-blue-500 transition-colors hover:text-blue-400"
         >
           {showBulk ? <X size={12} /> : <FileText size={12} />}
           {showBulk ? "Cancel Bulk Add" : "Bulk Add / CSV"}
-        </button>
+        </button> */}
       </div>
 
       {showBulk && (

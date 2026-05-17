@@ -1,4 +1,4 @@
-import { mainnet, sepolia } from "wagmi/chains";
+import { worldchain, worldchainSepolia } from "wagmi/chains";
 
 /**
  * ==============================
@@ -15,22 +15,22 @@ import { mainnet, sepolia } from "wagmi/chains";
  * That's it — everything else reads from here.
  */
 
-export const SUPPORTED_CHAINS = [mainnet, sepolia] as const;
+export const SUPPORTED_CHAINS = [worldchain, worldchainSepolia] as const;
 
 /** Sandwich contract address per chain ID */
 export const MULTISENDER_ADDRESSES: Record<number, `0x${string}`> = {
-  [mainnet.id]: "0x0000000000000000000000000000000000000000", // TODO: replace with deployed address
-  [sepolia.id]: "0x9025d62b6fBc72f7027Df204Cc32a702B19Be642",
+  [worldchain.id]: "0x9025d62b6fBc72f7027Df204Cc32a702B19Be642",
+  [worldchainSepolia.id]: "0x9025d62b6fBc72f7027Df204Cc32a702B19Be642",
 };
 
 /** Block explorer base URLs (wagmi chains have these, but override here if needed) */
 export const EXPLORER_URLS: Record<number, string> = {
-  [mainnet.id]: "https://etherscan.io",
-  [sepolia.id]: "https://sepolia.etherscan.io",
+  [worldchain.id]: "https://worldscan.org/",
+  [worldchainSepolia.id]: "https://sepolia.worldscan.org/",
 };
 
 /** Native currency symbols per chain ID */
 export const NATIVE_CURRENCY: Record<number, { name: string; symbol: string; decimals: number }> = {
-  [mainnet.id]: { name: "Ether", symbol: "ETH", decimals: 18 },
-  [sepolia.id]: { name: "Sepolia Ether", symbol: "ETH", decimals: 18 },
+  [worldchain.id]: { name: "Ether", symbol: "ETH", decimals: 18 },
+  [worldchainSepolia.id]: { name: "worldchainSepolia Ether", symbol: "ETH", decimals: 18 },
 };
